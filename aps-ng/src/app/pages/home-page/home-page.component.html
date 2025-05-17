@@ -1,0 +1,44 @@
+<div
+  id="navbar"
+  class="flex flex-row items-center justify-between p-4 bg-gray-100"
+>
+  <h1 class="text-xl font-bold">O tal do Grafo</h1>
+  <div class="flex flex-row items-center space-x-4">
+    <input
+      pInputText
+      type="text"
+      placeholder="Normal"
+      class="border rounded px-2 py-1"
+    />
+    <a
+      href="https://github.com/Lillo-M/Grafo-na-hora"
+      target="_blank"
+      class="text-black hover:text-gray-700 text-xl"
+      title="Ver no GitHub"
+    >
+      <i class="pi pi-github"></i>
+    </a>
+    <div
+      class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-semibold"
+    >
+      U
+    </div>
+  </div>
+</div>
+<div id="filter">
+    <app-filter-button [text]="'Concluídas'"></app-filter-button>
+    <app-filter-button [text]="'Optativas'"></app-filter-button>
+    <app-filter-button [text]="'Pendentes'"></app-filter-button>
+    <app-filter-button [text]="'TrilhaA'"></app-filter-button>
+    <app-filter-button [text]="'TrilhaB'"></app-filter-button>
+    <app-filter-button [text]="'TrilhaB'"></app-filter-button>
+    <app-filter-button [text]="'TrilhaB'"></app-filter-button>
+    <app-filter-button [text]="'TrilhaB'"></app-filter-button>
+    <app-filter-button [text]="'TrilhaB'"></app-filter-button>
+    <app-filter-button [text]="'TrilhaB'"></app-filter-button>
+    <app-filter-button [text]="'TrilhaB'"></app-filter-button>
+    <app-filter-button [text]="'TrilhaB'"></app-filter-button>
+</div>
+<div id="graph">
+  <app-graph-node discipline="Cálculo 3" period="3" (clicked)="showDisciplineInfo()"></app-graph-node>
+</div>
