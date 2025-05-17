@@ -2,6 +2,13 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.5.
 
+# Requerimentos
+* [Node JS](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+* [Angular](https://angular.dev/installation)
+* [PrimeNG](https://primeng.org/installation)
+* [TailwindCSS (com Angular)](https://tailwindcss.com/docs/installation/framework-guides/angular)
+* [TailwindCSS (com PrimeNG)](https://primeng.org/tailwind)
+
 ## Development server
 
 To start a local development server, run:

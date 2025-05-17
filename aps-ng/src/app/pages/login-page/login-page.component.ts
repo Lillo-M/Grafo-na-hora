@@ -62,7 +62,7 @@ export class LoginComponent {
 
     // Simulação de login
     if (username === 'admin' && password === '1234') {
-      this.router.navigate('/home');
+      this.router.navigate(['home']);
     } else {
       this.errorMessage = 'Usuário ou senha inválidos.';
       this.invalidCredentials = true;
