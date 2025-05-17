@@ -58,7 +58,6 @@ export class LoginComponent {
   }
 
   ngOnInit() {
-    console.log('teste de auth');
     let temp = localStorage.getItem('token');
     if (( temp && temp == 'testaNaAPI')) {
       // Testa na API se o token existe e está válido.

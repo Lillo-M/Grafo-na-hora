@@ -28,8 +28,9 @@ export class HomePageComponent implements AfterViewInit {
   router = inject(Router);
 
   ngOnInit() {
+    console.log(localStorage.getItem('token'));
     let temp = localStorage.getItem('token');
-    if (temp && temp != 'testaNaAPI') {
+    if (!temp || temp != 'testaNaAPI') {
       // Testa na API se o token existe e está válido.
       this.router.navigate(['/login']);
     }
