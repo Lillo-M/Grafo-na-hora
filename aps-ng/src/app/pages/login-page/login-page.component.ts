@@ -61,8 +61,8 @@ export class LoginComponent {
     const { username, password } = this.loginForm.value;
 
     // Simulação de login
-    if (username === 'admin' && password === '1234') {
-      this.router.navigate(['home']);
+    if (username === 'admin' && password === 'admin') {
+      this.router.navigate(['/home']);
     } else {
       this.errorMessage = 'Usuário ou senha inválidos.';
       this.invalidCredentials = true;

@@ -2,11 +2,12 @@ import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { InputTextModule } from 'primeng/inputtext';
 import { FilterButtonComponent } from './filter-button/filter-button.component';
 import { GraphNodeComponent } from './graph-node/graph-node.component';
+import { CardModule } from 'primeng/card';
 
 @Component({
   selector: 'app-home-page',
   standalone: true,              // Adicione se for standalone
-  imports: [InputTextModule, FilterButtonComponent, GraphNodeComponent],
+  imports: [InputTextModule, FilterButtonComponent, GraphNodeComponent, CardModule],
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.scss']  // Corrigido de styleUrl para styleUrls
 })

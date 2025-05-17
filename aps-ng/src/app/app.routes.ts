@@ -8,7 +8,6 @@ export const routes: Routes = [
     title: 'Fazer login',
     component: LoginComponent,
   },
-  { path: '**', redirectTo: '/login' },
   {
     path: 'home',
     component: HomePageComponent,
