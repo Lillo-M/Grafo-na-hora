@@ -1,49 +1,51 @@
-<div id="navbar" class="flex justify-center my-2">
-  <p-card styleClass="w-[99dvw]">
-    <div class="flex flex-row items-center justify-between p-4">
-      <h1 class="text-xl font-bold">O tal do Grafo</h1>
-      <div class="flex flex-row items-center space-x-4">
-        <input
-          pInputText
-          type="text"
-          placeholder="Normal"
-          class="border rounded px-2 py-1"
-        />
-        <a
-          href="https://github.com/Lillo-M/Grafo-na-hora"
-          target="_blank"
-          class="text-black hover:text-gray-700 text-xl"
-          title="Ver no GitHub"
-        >
-          <i class="pi pi-github"></i>
-        </a>
-        <div
-          class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-semibold"
-        >
-          U
+<div class="flex flex-col">
+  <div id="navbar" class="flex justify-center my-2">
+    <p-card styleClass="w-[99dvw]">
+      <div class="flex flex-col sm:flex-row items-center justify-between p-4">
+        <h1 class="text-xl font-bold">O tal do Grafo</h1>
+        <div class="flex flex-row items-center space-x-4">
+          <input
+            pInputText
+            type="text"
+            placeholder="Normal"
+            class="border rounded px-2 py-1"
+          />
+          <a
+            href="https://github.com/Lillo-M/Grafo-na-hora"
+            target="_blank"
+            class="text-black hover:text-gray-700 text-xl"
+            title="Ver no GitHub"
+          >
+            <i class="pi pi-github"></i>
+          </a>
+          <div
+            class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-semibold"
+          >
+            U
+          </div>
         </div>
       </div>
-    </div>
-  </p-card>
-</div>
-<div id="filter">
-  <app-filter-button [text]="'Concluídas'"></app-filter-button>
-  <app-filter-button [text]="'Optativas'"></app-filter-button>
-  <app-filter-button [text]="'Pendentes'"></app-filter-button>
-  <app-filter-button [text]="'TrilhaA'"></app-filter-button>
-  <app-filter-button [text]="'TrilhaB'"></app-filter-button>
-  <app-filter-button [text]="'TrilhaB'"></app-filter-button>
-  <app-filter-button [text]="'TrilhaB'"></app-filter-button>
-  <app-filter-button [text]="'TrilhaB'"></app-filter-button>
-  <app-filter-button [text]="'TrilhaB'"></app-filter-button>
-  <app-filter-button [text]="'TrilhaB'"></app-filter-button>
-  <app-filter-button [text]="'TrilhaB'"></app-filter-button>
-  <app-filter-button [text]="'TrilhaB'"></app-filter-button>
-</div>
-<div id="graph">
-  <app-graph-node
-    discipline="Cálculo 3"
-    period="3"
-    (clicked)="showDisciplineInfo()"
-  ></app-graph-node>
+    </p-card>
+  </div>
+  <div id="filter" class="w-[99dvw] self-center">
+    <app-filter-button [text]="'Concluídas'"></app-filter-button>
+    <app-filter-button [text]="'Optativas'"></app-filter-button>
+    <app-filter-button [text]="'Pendentes'"></app-filter-button>
+    <app-filter-button [text]="'TrilhaA'"></app-filter-button>
+    <app-filter-button [text]="'TrilhaB'"></app-filter-button>
+    <app-filter-button [text]="'TrilhaB'"></app-filter-button>
+    <app-filter-button [text]="'TrilhaB'"></app-filter-button>
+    <app-filter-button [text]="'TrilhaB'"></app-filter-button>
+    <app-filter-button [text]="'TrilhaB'"></app-filter-button>
+    <app-filter-button [text]="'TrilhaB'"></app-filter-button>
+    <app-filter-button [text]="'TrilhaB'"></app-filter-button>
+    <app-filter-button [text]="'TrilhaB'"></app-filter-button>
+  </div>
+  <div id="graph">
+    <app-graph-node
+      discipline="Cálculo 3"
+      period="3"
+      (clicked)="showDisciplineInfo()"
+    ></app-graph-node>
+  </div>
 </div>

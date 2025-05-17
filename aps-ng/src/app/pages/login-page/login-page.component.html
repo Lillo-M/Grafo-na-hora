@@ -7,6 +7,7 @@
           pInputText
           formControlName="username"
           pSize="small"
+          variant="filled"
           [class]="(submitted && invalidCredentials)  ? 'ng-invalid ng-dirty':''"
         />
         <label for="username">Usuário</label>
@@ -28,7 +29,7 @@
     </form>
     @if (errorMessage != '') {
     <div class="items-center absolute top-40">
-      <p-message class="text-center" severity="error">{{ errorMessage }}</p-message>
+      <p-message [life]="3000" class="text-center" severity="error">{{ errorMessage }}</p-message>
     </div>
     }
   </div>
