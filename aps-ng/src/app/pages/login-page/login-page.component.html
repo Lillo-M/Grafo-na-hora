@@ -1,0 +1,35 @@
+<div class="flex items-center justify-center w-screen h-screen">
+  <div class="flex flex-col gap-2 relative">
+    <form [formGroup]="loginForm" class="flex flex-col gap-2 self-center">
+      <p-floatlabel variant="on">
+        <input
+          id="username"
+          pInputText
+          formControlName="username"
+          pSize="small"
+          [class]="(submitted && invalidCredentials)  ? 'ng-invalid ng-dirty':''"
+        />
+        <label for="username">Usuário</label>
+      </p-floatlabel>
+      <p-floatlabel variant="on">
+        <input
+          [type]="'password'"
+          id="password"
+          pInputText
+          formControlName="password"
+          pSize="small"
+          [class]="(submitted && invalidCredentials)  ? 'ng-invalid ng-dirty':''"
+        />
+        <label for="password">Senha</label>
+      </p-floatlabel>
+      <div class="card flex justify-center">
+        <p-button label="Entrar" (onClick)="onSubmit()" />
+      </div>
+    </form>
+    @if (errorMessage != '') {
+    <div class="items-center absolute top-40">
+      <p-message class="text-center" severity="error">{{ errorMessage }}</p-message>
+    </div>
+    }
+  </div>
+</div>

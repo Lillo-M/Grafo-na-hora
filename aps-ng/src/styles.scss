@@ -2,3 +2,8 @@
 @import "tailwindcss";
 @plugin "tailwindcss-primeui";
 @import "primeicons/primeicons.css";
+
+
+body {
+  font-family: 'Roboto', sans-serif;
+}
