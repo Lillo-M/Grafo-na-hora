@@ -35,8 +35,7 @@ export class HomePageComponent implements AfterViewInit {
   drawerVisible: boolean = false;
 
   ngOnInit() {
-    console.log(localStorage.getItem('token'));
-    let temp = localStorage.getItem('token');
+    let temp = sessionStorage.getItem('token');
     if (!temp || temp != 'testaNaAPI') {
       // Testa na API se o token existe e está válido.
       this.router.navigate(['/login']);

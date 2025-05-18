@@ -58,7 +58,7 @@ export class LoginComponent {
   }
 
   ngOnInit() {
-    let temp = localStorage.getItem('token');
+    let temp = sessionStorage.getItem('token');
     if (( temp && temp == 'testaNaAPI')) {
       // Testa na API se o token existe e está válido.
       console.log('testou e deu boa');
@@ -88,7 +88,7 @@ export class LoginComponent {
 
     // Simulação de login
     if (username === 'admin' && password === 'admin') {
-      localStorage.setItem('token', 'testaNaAPI'); // Seta Token com oq recebeu da API
+      sessionStorage.setItem('token', 'testaNaAPI'); // Seta Token com oq recebeu da API
       this.router.navigate(['/home']);
     } else {
       this.errorMessage = 'Usuário ou senha inválidos.';
