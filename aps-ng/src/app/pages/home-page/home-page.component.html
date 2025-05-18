@@ -48,4 +48,26 @@
       (clicked)="showDisciplineInfo()"
     ></app-graph-node>
   </div>
+  <p-drawer header="Física 2" [(visible)]="drawerVisible" position="right">
+    <p>Rafael Barrets</p>
+    <div class="flex items-center gap-2">
+      <label for="optativaCB" class="cursor-pointer">Optativa</label>
+      <p-checkbox inputId="optativaCB" [binary]="true"></p-checkbox>
+    </div>
+        <div class="flex items-center gap-2">
+      <label for="chsText" class="cursor-pointer">Carga Horária Semanal</label>
+      <p-checkbox inputId="chsText" [binary]="true"></p-checkbox>
+    </div>
+    <p>Pré-requisitos</p>
+    <ul id="pre-requisites-list">
+      <li>
+        Cálculo 1
+      </li>
+      <li>
+        Física 1
+      </li>
+    </ul>
+
+    <p-button label="Marcar como concluída" variant="text" severity="help" />
+  </p-drawer>
 </div>

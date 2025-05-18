@@ -10,6 +10,9 @@ import { FilterButtonComponent } from './filter-button/filter-button.component';
 import { GraphNodeComponent } from './graph-node/graph-node.component';
 import { CardModule } from 'primeng/card';
 import { Router } from '@angular/router';
+import { DrawerModule } from 'primeng/drawer';
+import { CheckboxModule } from 'primeng/checkbox';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-home-page',
@@ -19,6 +22,9 @@ import { Router } from '@angular/router';
     FilterButtonComponent,
     GraphNodeComponent,
     CardModule,
+    DrawerModule,
+    CheckboxModule,
+    ButtonModule
   ],
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.scss'], // Corrigido de styleUrl para styleUrls
@@ -26,6 +32,7 @@ import { Router } from '@angular/router';
 export class HomePageComponent implements AfterViewInit {
   @ViewChild('filter') filterDiv!: ElementRef<HTMLDivElement>;
   router = inject(Router);
+  drawerVisible: boolean = false;
 
   ngOnInit() {
     console.log(localStorage.getItem('token'));
@@ -49,7 +56,6 @@ export class HomePageComponent implements AfterViewInit {
     );
   }
   showDisciplineInfo() {
-    alert('Discipline information');
-    // ou use uma variável para exibir no template
+    this.drawerVisible = true;
   }
 }
