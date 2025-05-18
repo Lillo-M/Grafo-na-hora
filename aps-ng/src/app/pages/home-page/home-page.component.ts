@@ -5,9 +5,12 @@ import {
   AfterViewInit,
   inject,
 } from '@angular/core';
-import { InputTextModule } from 'primeng/inputtext';
 import { FilterButtonComponent } from './filter-button/filter-button.component';
 import { GraphNodeComponent } from './graph-node/graph-node.component';
+import { FeedbackModalComponent } from './feedback-modal/feedback-modal.component';
+import { ConfigModalComponent } from './config-modal/config-modal.component';
+
+import { InputTextModule } from 'primeng/inputtext';
 import { CardModule } from 'primeng/card';
 import { Router } from '@angular/router';
 import { DrawerModule } from 'primeng/drawer';
@@ -21,10 +24,12 @@ import { ButtonModule } from 'primeng/button';
     InputTextModule,
     FilterButtonComponent,
     GraphNodeComponent,
+    FeedbackModalComponent,
     CardModule,
     DrawerModule,
     CheckboxModule,
-    ButtonModule
+    ButtonModule,
+    ConfigModalComponent
   ],
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.scss'], // Corrigido de styleUrl para styleUrls

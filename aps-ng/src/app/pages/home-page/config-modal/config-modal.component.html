@@ -1,0 +1,43 @@
+<p-button
+  icon="pi pi-user"
+  [rounded]="true"
+  severity="info"
+  (click)="showDialog()"
+/>
+<p-dialog
+  header="Configurações de usuário"
+  [(visible)]="visible"
+  [modal]="true"
+  [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+  [style]="{ width: '50vw', height: '80vh' }"
+  [dismissableMask]="true"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <div>
+    <form [formGroup]="formGroup" class="card flex justify-center">
+      <p-multiselect
+        [options]="disciplines"
+        formControlName="disciplines"
+        optionLabel="name"
+        placeholder="Selecione as disciplinas concluídas"
+        [maxSelectedLabels]="3"
+        styleClass="w-full md:w-80"
+      />
+    </form>
+    <p-inputgroup>
+      <p-inputgroup-addon>
+        <i class="pi pi-user"></i>
+      </p-inputgroup-addon>
+      <input pInputText placeholder="Usuário a deletar" />
+    </p-inputgroup>
+  </div>
+  <ng-template pTemplate="footer">
+    <p-button
+      label="Salvar"
+      [disabled]="formGroup.invalid"
+      (click)="submitChanges()"
+      severity="primary"
+    />
+  </ng-template>
+</p-dialog>
