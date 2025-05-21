@@ -18,8 +18,6 @@ $ npm install primeng @primeng/themes
 $ npm install tailwindcss @tailwindcss/postcss postcss --force
 $ npm i tailwindcss-primeui
 $ npm install
-$ cd aps-ng/ # this directory
-$ ng serve
 ```
 
 ## Development server
