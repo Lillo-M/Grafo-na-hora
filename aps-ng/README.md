@@ -11,13 +11,13 @@ This project was generated using [Angular CLI](https://github.com/angular/angula
 
 Install on Debian:
 ```bash
-$ sudo apt install nodejs
-$ sudo apt install npm
-$ sudo npm install -g @angular/cli
-$ npm install primeng @primeng/themes
-$ npm install tailwindcss @tailwindcss/postcss postcss --force
-$ npm i tailwindcss-primeui
-$ npm install
+sudo apt install nodejs
+sudo apt install npm
+sudo npm install -g @angular/cli
+npm install primeng @primeng/themes
+npm install tailwindcss @tailwindcss/postcss postcss --force
+npm i tailwindcss-primeui
+npm install # on this directory
 ```
 
 ## Development server
