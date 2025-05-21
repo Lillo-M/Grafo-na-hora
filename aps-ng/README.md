@@ -10,6 +10,7 @@ This project was generated using [Angular CLI](https://github.com/angular/angula
 * [TailwindCSS (com PrimeNG)](https://primeng.org/tailwind)
 
 Install on Debian:
+```bash
 $ sudo apt install nodejs
 $ sudo apt install npm
 $ sudo npm install -g @angular/cli
@@ -19,6 +20,7 @@ $ npm i tailwindcss-primeui
 $ npm install
 $ cd aps-ng/ # this directory
 $ ng serve
+```
 
 ## Development server
 
