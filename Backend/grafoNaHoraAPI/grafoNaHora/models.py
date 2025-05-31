@@ -36,9 +36,9 @@ class DisciplinaMatriz(models.Model):
     # id auto
     matriz        = models.ForeignKey(Matriz, on_delete=models.CASCADE)
     periodo       = models.PositiveSmallIntegerField()
-    optativa      = models.ForeignKey(Optativa, on_delete=models.CASCADE) # trilha
+    optativa      = models.ForeignKey(Optativa, on_delete=models.CASCADE, null=True) # trilha
     disciplina    = models.ForeignKey(Disciplina, on_delete=models.CASCADE)
     carga_horaria = models.PositiveSmallIntegerField()
-
+    disciplinas_prerequisitos = models.ManyToManyField('self', symmetrical=False, blank=True)
     def __str__(self):
        return f'{self.id}'
