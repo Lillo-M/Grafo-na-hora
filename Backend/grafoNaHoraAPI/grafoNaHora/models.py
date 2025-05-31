@@ -32,7 +32,7 @@ class Optativa(models.Model): # trilha
     def __str__(self):
         return f'{self.id}'
 
-class OpcaoDisciplinas(models.Model):
+class DisciplinaMatriz(models.Model):
     # id auto
     matriz        = models.ForeignKey(Matriz, on_delete=models.CASCADE)
     periodo       = models.PositiveSmallIntegerField()
