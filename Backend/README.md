@@ -9,7 +9,7 @@ pip install -r requirements.txt # after activating
 ```
 
 # Requerimentos
-* Python 3.1.2
+* Python 3.11.2
 
 ---
 Para rodar o projeto, escreva 
