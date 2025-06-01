@@ -5,7 +5,7 @@
 
 Create a virtual environment and install dependencies on Debian:
 ```bash
-sudo apt install python3.11>-venv
+sudo apt install python3.11-venv
 python3 -m venv <venv_path>
 source <venv_path>/bin/activate
 pip install -r requirements.txt # after activating
