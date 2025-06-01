@@ -1,6 +1,5 @@
 from django.db import models
 
-# Create your models here.
 
 class Disciplina(models.Model):
     id = models.CharField(max_length=20, primary_key=True)
@@ -40,5 +39,6 @@ class DisciplinaMatriz(models.Model):
     disciplina    = models.ForeignKey(Disciplina, on_delete=models.CASCADE)
     carga_horaria = models.PositiveSmallIntegerField()
     disciplinas_prerequisitos = models.ManyToManyField('self', symmetrical=False, blank=True)
+
     def __str__(self):
        return f'{self.id}'

@@ -2,7 +2,7 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.5.
 
-# Requeriments
+# Requirements
 * [Node JS](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 * [Angular](https://angular.dev/installation)
 * [PrimeNG](https://primeng.org/installation)
