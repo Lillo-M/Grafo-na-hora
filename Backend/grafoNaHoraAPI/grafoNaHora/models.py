@@ -2,8 +2,8 @@ from django.db import models
 
 
 class Disciplina(models.Model):
-    id = models.CharField(max_length=20, primary_key=True)
-    nome   = models.CharField(max_length=200)
+    id   = models.CharField(max_length=20, primary_key=True)
+    nome = models.CharField(max_length=200)
 
     def __str__(self):
         return f'{self.id}'
@@ -25,7 +25,7 @@ class Matriz(models.Model):
         return f'{self.id}'
 
 class Optativa(models.Model): # trilha
-    id = models.PositiveSmallIntegerField(primary_key=True)
+    id   = models.PositiveSmallIntegerField(primary_key=True)
     nome = models.CharField(max_length=200)
 
     def __str__(self):
