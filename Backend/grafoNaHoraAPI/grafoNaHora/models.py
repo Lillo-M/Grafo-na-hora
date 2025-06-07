@@ -64,16 +64,13 @@ class Usuario(models.Model):
     def set_password(self, raw_password):
         self.senha = make_password(raw_password) # gera hash da senha
         self.save(update_fields=['senha'])
-
     def check_password(self, raw_password):
         return check_password(raw_password, self.senha) # verifica se hash da senha bate
 
     def add_disciplina_concluida(self, disciplina):
         self.disciplinas_concluidas.add(disciplina)
-
     def rm_disciplina_concluida(self, disciplina):
         self.disciplinas_concluidas.remove(disciplina)
-
     def get_all_disciplinas_concluidas(self):
         return self.disciplinas_concluidas.all()
     
@@ -90,7 +87,7 @@ class Usuario(models.Model):
 
 class Feedback(models.Model):
     # id auto
-    texto = models.TextField()
+    texto   = models.TextField()
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
 
     def __str__(self):
