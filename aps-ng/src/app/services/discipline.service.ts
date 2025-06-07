@@ -7,7 +7,7 @@ interface Discipline {
   periodo: number;
   nome_optativa: string | null;
   carga_horaria: number;
-  pre_requisitos: any[]; // ou algo mais específico
+  pre_requisitos: any[];
 }
 
 interface ApiResponse {
@@ -18,7 +18,7 @@ interface ApiResponse {
 
 @Injectable({ providedIn: 'root' })
 export class DisciplineService {
-  private baseUrl = 'http://localhost:8000/cursos/1/disciplinas/'; // ajuste conforme seu backend
+  private baseUrl = 'http://localhost:8000/cursos/1/disciplinas/';
 
   constructor(private http: HttpClient) {}
 
