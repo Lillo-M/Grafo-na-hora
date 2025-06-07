@@ -1,0 +1,86 @@
+<div style="display: flex; justify-content: center; align-items: center; height: 100vh; width: 100vw;">
+  <div class="surface-card p-4 shadow-2 border-round" style="width: 25rem;">
+    <div class="text-center mb-5">
+      <h2 class="text-800 text-3xl font-medium mb-1">Cadastro</h2>
+      <span class="text-600 text-sm">Crie sua conta para continuar</span>
+    </div>
+
+    <div class="p-fluid">
+      <div class="field mb-3">
+        <p-floatlabel variant="on">
+          <input
+            id="username"
+            type="text"
+            pInputText
+            [(ngModel)]="username"
+            placeholder=" "
+            class="w-full"
+            variant="filled"
+            pSize="small"
+          />
+          <label for="username">Usuário</label>
+        </p-floatlabel>
+        <p-message *ngIf="usernameError" severity="error" [text]="usernameError" class="mt-1"></p-message>
+      </div>
+
+      <div class="field mb-3">
+        <p-floatlabel variant="on">
+          <input
+            id="email"
+            type="email"
+            pInputText
+            [(ngModel)]="email"
+            placeholder=" "
+            class="w-full"
+            variant="filled"
+            pSize="small"
+          />
+          <label for="email">Email</label>
+        </p-floatlabel>
+        <p-message *ngIf="emailError" severity="error" [text]="emailError" class="mt-1"></p-message>
+      </div>
+
+      <div class="field mb-3">
+        <p-floatlabel variant="on">
+          <input
+            id="password"
+            type="password"
+            pInputText
+            [(ngModel)]="password"
+            placeholder=" "
+            class="w-full"
+            variant="filled"
+            pSize="small"
+          />
+          <label for="password">Senha</label>
+        </p-floatlabel>
+        <p-message *ngIf="passwordError" severity="error" [text]="passwordError" class="mt-1"></p-message>
+      </div>
+
+      <div class="field mb-4">
+        <p-floatlabel variant="on">
+          <input
+            id="confirmPassword"
+            type="password"
+            pInputText
+            [(ngModel)]="confirmPassword"
+            placeholder=" "
+            class="w-full"
+            variant="filled"
+            pSize="small"
+          />
+          <label for="confirmPassword">Confirmar senha</label>
+        </p-floatlabel>
+        <p-message *ngIf="confirmPasswordError" severity="error" [text]="confirmPasswordError" class="mt-1"></p-message>
+      </div>
+
+      <button
+        pButton
+        type="button"
+        label="Cadastrar"
+        class="w-full"
+        (click)="register()"
+      ></button>
+    </div>
+  </div>
+</div>

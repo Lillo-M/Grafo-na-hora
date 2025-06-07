@@ -2,23 +2,12 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.5.
 
-# Requirements
+# Requerimentos
 * [Node JS](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 * [Angular](https://angular.dev/installation)
 * [PrimeNG](https://primeng.org/installation)
 * [TailwindCSS (com Angular)](https://tailwindcss.com/docs/installation/framework-guides/angular)
 * [TailwindCSS (com PrimeNG)](https://primeng.org/tailwind)
-
-Install on Debian:
-```bash
-sudo apt install nodejs
-sudo apt install npm
-sudo npm install -g @angular/cli
-npm install primeng @primeng/themes
-npm install tailwindcss @tailwindcss/postcss postcss --force
-npm i tailwindcss-primeui
-npm install # on this directory
-```
 
 ## Development server
 
