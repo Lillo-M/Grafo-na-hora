@@ -10,27 +10,47 @@ import { ButtonModule } from 'primeng/button';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
+import { DisciplineService } from '../../../services/discipline.service';
+import { InputTextModule } from 'primeng/inputtext';
+import { FormsModule } from '@angular/forms';
+
 
 @Component({
   selector: 'app-config-modal',
-  imports: [DialogModule, ButtonModule, ReactiveFormsModule, MultiSelectModule, InputGroupModule, InputGroupAddonModule],
   templateUrl: './config-modal.component.html',
-  styleUrl: './config-modal.component.scss',
+  styleUrls: ['./config-modal.component.scss'],
+  imports: [
+    DialogModule,
+    ButtonModule,
+    MultiSelectModule,
+    InputGroupModule,
+    InputGroupAddonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    InputTextModule
+  ],
 })
 export class ConfigModalComponent {
-  visible: boolean = false;
+  deleteUser: string | undefined;
+  visible = false;
   formGroup: FormGroup;
-  dialogHeight = 'auto';
+  disciplines: { name: string }[] = [];
 
-  disciplines = [ 'Física 1', 'Física 2', 'Matemática 1', 'Matemática 2', 'Química 1', 'Química 2'];
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private disciplineService: DisciplineService) {
     this.formGroup = this.fb.group({
-      text: ['', Validators.required]
+      disciplines: [[], Validators.required]
     });
   }
 
   showDialog() {
     this.visible = true;
+    this.loadDisciplines();
+  }
+
+  loadDisciplines() {
+    this.disciplineService.getDisciplines().subscribe(response => {
+      this.disciplines = response.data.map(d => ({ name: d.nome }));
+    });
   }
 
   submitChanges() {

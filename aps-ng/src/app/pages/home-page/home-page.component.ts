@@ -29,7 +29,7 @@ import { ButtonModule } from 'primeng/button';
     DrawerModule,
     CheckboxModule,
     ButtonModule,
-    ConfigModalComponent
+    ConfigModalComponent,
   ],
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.scss'], // Corrigido de styleUrl para styleUrls
