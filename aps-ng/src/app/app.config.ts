@@ -5,6 +5,7 @@ import Material from '@primeng/themes/material';
 import { definePreset } from '@primeng/themes';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
+import { provideHttpClient } from '@angular/common/http';
 
 const MyPreset = definePreset(Material, {
   semantic: {
@@ -36,5 +37,6 @@ export const appConfig: ApplicationConfig = {
         },
       },
     }),
+    provideHttpClient(),
   ],
 };
