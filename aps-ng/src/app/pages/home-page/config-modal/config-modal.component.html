@@ -14,7 +14,22 @@
   [draggable]="false"
   [resizable]="false"
 >
-  <div>
+  <div style="display: flex; flex-direction: column; gap: 1.5rem">
+    <div id="delete-user" style="display: flex; align-items: center; gap: 1rem">
+      <div style="flex-grow: 1;">
+        <p-inputgroup>
+          <p-inputgroup-addon>
+            <i class="pi pi-user"></i>
+          </p-inputgroup-addon>
+          <input pInputText type="text" [(ngModel)]="deleteUser" placeholder="Usuário a deletar" />
+        </p-inputgroup>
+      </div>
+      <p-button
+        label="Deletar usuário"
+        (click)="submitChanges()"
+        severity="primary"
+      />
+    </div>
     <form [formGroup]="formGroup" class="card flex justify-center">
       <p-multiselect
         [options]="disciplines"
@@ -22,15 +37,13 @@
         optionLabel="name"
         placeholder="Selecione as disciplinas concluídas"
         [maxSelectedLabels]="3"
-        styleClass="w-full md:w-80"
-      />
+        class="w-full"
+        styleClass="h-full"
+        size="large"
+        scrollHeight="40vh"
+        [panelStyle]="{ width: '400px' }"
+      ></p-multiselect>
     </form>
-    <p-inputgroup>
-      <p-inputgroup-addon>
-        <i class="pi pi-user"></i>
-      </p-inputgroup-addon>
-      <input pInputText placeholder="Usuário a deletar" />
-    </p-inputgroup>
   </div>
   <ng-template pTemplate="footer">
     <p-button
