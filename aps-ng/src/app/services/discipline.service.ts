@@ -1,16 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Discipline } from '../interfaces/discipline';
 
-interface Discipline {
-  nome: string;
-  periodo: number;
-  nome_optativa: string | null;
-  carga_horaria: number;
-  pre_requisitos: any[];
-}
 
-interface ApiResponse {
+export interface ApiResponse {
   success: boolean;
   message: string;
   data: Discipline[];
