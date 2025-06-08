@@ -37,34 +37,37 @@
     <app-filter-button [text]="'TrilhaB'"></app-filter-button>
     <app-filter-button [text]="'TrilhaB'"></app-filter-button>
   </div>
-  <div id="graph">
-    <app-graph-node
-      discipline="Cálculo 3"
-      period="3"
-      (clicked)="showDisciplineInfo()"
-    ></app-graph-node>
+  <div id="grafo">
+    <app-graph (showDrawer)="showDisciplineInfo($event)"></app-graph>
   </div>
-  <p-drawer header="Física 2" [(visible)]="drawerVisible" position="right">
-    <p>Rafael Barrets</p>
+  <p-drawer
+    [header]="selectedDiscpline?.nome"
+    [(visible)]="drawerVisible"
+    position="right"
+  >
+    @if(selectedDiscpline?.nome_optativa != null) {
     <div class="flex items-center gap-2">
-      <label for="optativaCB" class="cursor-pointer">Optativa</label>
-      <p-checkbox inputId="optativaCB" [binary]="true"></p-checkbox>
+      <label for="optativaCB" class="cursor-pointer">Disciplina Optativa</label>
     </div>
-        <div class="flex items-center gap-2">
-      <label for="chsText" class="cursor-pointer">Carga Horária Semanal</label>
-      <p-checkbox inputId="chsText" [binary]="true"></p-checkbox>
+    }
+    <div class="flex items-center gap-2">
+      <label for="chsText" class="cursor-pointer"
+        >Carga Horária Semanal:
+      </label>
+      <span>{{ selectedDiscpline?.carga_horaria }}</span>
     </div>
-    <p>Pré-requisitos</p>
+    @if ( selectedDiscpline?.pre_requisitos &&
+    selectedDiscpline!.pre_requisitos!.length > 0) {
+    <p>Pré-requisitos:</p>
     <ul id="pre-requisites-list">
-      <li>
-        Cálculo 1
-      </li>
-      <li>
-        Física 1
-      </li>
+      @for (disciplineName of selectedDiscpline?.pre_requisitos; track $index) {
+      <div class="w-full border-b-1"></div>
+      <li>{{ disciplineName }}</li>
+      }
     </ul>
+    }
 
     <p-button label="Marcar como concluída" variant="text" severity="help" />
   </p-drawer>
-  <app-feedback-modal></app-feedback-modal>
+  <app-feedback-modal class="self-center"></app-feedback-modal>
 </div>

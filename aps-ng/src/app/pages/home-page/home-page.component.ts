@@ -16,6 +16,9 @@ import { Router } from '@angular/router';
 import { DrawerModule } from 'primeng/drawer';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
+import { GraphComponent } from './graph/graph.component';
+import { DisciplineService } from '../../services/discipline.service';
+import { Discipline } from '../../interfaces/discipline';
 
 @Component({
   selector: 'app-home-page',
@@ -23,6 +26,7 @@ import { ButtonModule } from 'primeng/button';
   imports: [
     InputTextModule,
     FilterButtonComponent,
+    GraphComponent,
     GraphNodeComponent,
     FeedbackModalComponent,
     CardModule,
@@ -37,14 +41,23 @@ import { ButtonModule } from 'primeng/button';
 export class HomePageComponent implements AfterViewInit {
   @ViewChild('filter') filterDiv!: ElementRef<HTMLDivElement>;
   router = inject(Router);
+  disciplineService = inject(DisciplineService);
   drawerVisible: boolean = false;
+  selectedDiscpline?: Discipline;
+  disciplineDict: { [cursoId: string]: Discipline } = {};
 
   ngOnInit() {
     let temp = sessionStorage.getItem('token');
     if (!temp || temp != 'testaNaAPI') {
       // Testa na API se o token existe e está válido.
       this.router.navigate(['/login']);
+      return;
     }
+    this.disciplineService.getDisciplines().subscribe((response) => {
+      response.data.forEach(
+        (discipline) => (this.disciplineDict[discipline.nome] = discipline)
+      );
+    });
   }
 
   ngAfterViewInit() {
@@ -59,7 +72,9 @@ export class HomePageComponent implements AfterViewInit {
       { passive: false }
     );
   }
-  showDisciplineInfo() {
+
+  showDisciplineInfo(cursoId?: string) {
+    this.selectedDiscpline = this.disciplineDict[cursoId ?? ''];
     this.drawerVisible = true;
   }
 }
