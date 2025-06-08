@@ -21,7 +21,7 @@ from django.urls import path, re_path
 from rest_framework.permissions import AllowAny
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-from grafoNaHora.views import DisciplinasPorCursoView, CadastroView, LoginView
+from grafoNaHora.views import DisciplinasPorCursoView, CadastroView, LoginView, DisciplinasConcluidasView
 
 
 
@@ -43,5 +43,5 @@ urlpatterns = [
     path('cursos/<int:curso_id>/disciplinas/', DisciplinasPorCursoView.as_view()),
     path('usuarios/cadastrar/', CadastroView.as_view(), name='cadastrar_usuario'),
     path('usuarios/login/', LoginView.as_view(), name='login_usuario'),
-
+    path('usuarios/<str:nome_usuario>/disciplinas_concluidas/', DisciplinasConcluidasView.as_view()),
 ]

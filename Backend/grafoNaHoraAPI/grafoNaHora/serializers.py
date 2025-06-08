@@ -2,10 +2,15 @@
 from rest_framework import serializers
 from .models import Disciplina, DisciplinaMatriz, Usuario
 
-class DisciplinaSerializer(serializers.ModelSerializer):
+class DisciplinaMatrizSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Disciplina
-        fields = ['id', 'nome']
+        model = DisciplinaMatriz
+        fields = ['id', 'matriz', 'periodo', 'optativa', 'disciplina', 'carga_horaria']
+
+class AtualizaDisciplinasConcluidasSerializer(serializers.Serializer):
+    disciplinas_concluidas = serializers.ListField(
+        child=serializers.CharField(max_length=20)
+    )
 
 class DisciplinaMatrizDetalhadaSerializer(serializers.ModelSerializer):
     nome = serializers.CharField(source='disciplina.nome')

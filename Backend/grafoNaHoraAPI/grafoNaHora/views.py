@@ -8,20 +8,13 @@ from rest_framework import status
 from rest_framework.views import APIView
 
 from .models import Curso, DisciplinaMatriz, Disciplina, Usuario
-from .serializers import DisciplinaSerializer, UsuarioCadastroSerializer, UsuarioLoginSerializer
+from .serializers import UsuarioCadastroSerializer, UsuarioLoginSerializer, AtualizaDisciplinasConcluidasSerializer, DisciplinaMatrizDetalhadaSerializer, DisciplinaMatrizSerializer
 
 schema_view = get_swagger_view(title='GrafoNaHora API')
 
 urlpatterns = [
     path('', schema_view)
 ]
-
-@api_view(['GET'])
-def meu_endpoint(request):
-    return JsonResponse({'mensagem': 'Olá, mundo!'})
-
-from .models import Curso, DisciplinaMatriz
-from .serializers import DisciplinaMatrizDetalhadaSerializer
 
 class DisciplinasPorCursoView(APIView):
     def get(self, request, curso_id):
@@ -39,6 +32,7 @@ class DisciplinasPorCursoView(APIView):
         # Filtros opcionais
         optativa_id = request.query_params.get('optativa')
         periodo = request.query_params.get('periodo')
+        usuario_nome = request.query_params.get('usuario')
 
         if optativa_id:
             disciplinas_matriz = disciplinas_matriz.filter(optativa__id=optativa_id)
@@ -46,16 +40,43 @@ class DisciplinasPorCursoView(APIView):
         if periodo:
             disciplinas_matriz = disciplinas_matriz.filter(periodo=periodo)
 
+        if usuario_nome:
+            try:
+                usuario = Usuario.objects.get(nome=usuario_nome)
+                disciplinas_matriz = disciplinas_matriz.filter(id__in=usuario.disciplinas_concluidas.values_list('id', flat=True))
+            except Usuario.DoesNotExist:
+                return Response({
+                    "success": False,
+                    "message": "Usuário não encontrado",
+                    "data": []
+                }, status=status.HTTP_404_NOT_FOUND)
+
         disciplinas_matriz = disciplinas_matriz.select_related('disciplina', 'optativa').prefetch_related('disciplinas_prerequisitos')
 
         serializer = DisciplinaMatrizDetalhadaSerializer(disciplinas_matriz, many=True)
         return Response({
             "success": True,
-            "message": f"Disciplinas do curso {curso.nome}",
+            "message": f"Disciplinas do curso {curso.nome}" + (f" concluídas por {usuario_nome}" if usuario_nome else ""),
             "data": serializer.data
         })
 
+class DisciplinasConcluidasView(APIView):
+    def post(self, request, nome_usuario):
+        try:
+            usuario = Usuario.objects.get(nome=nome_usuario)
+        except Usuario.DoesNotExist:
+            return Response({'success': False, 'message': 'Usuário não encontrado'}, status=status.HTTP_404_NOT_FOUND)
 
+        serializer = AtualizaDisciplinasConcluidasSerializer(data=request.data)
+        if serializer.is_valid():
+            ids_disciplinas = serializer.validated_data['disciplinas_concluidas']
+            disciplinas = DisciplinaMatriz.objects.filter(id__in=ids_disciplinas)
+            usuario.disciplinas_concluidas.set(disciplinas)
+            usuario.save()
+            return Response({'success': True, 'message': 'Disciplinas concluídas atualizadas com sucesso'})
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
 class CadastroView(APIView):
     def post(self, request):
         serializer = UsuarioCadastroSerializer(data=request.data)

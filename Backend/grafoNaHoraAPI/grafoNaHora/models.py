@@ -57,8 +57,13 @@ class Usuario(models.Model):
     senha   = models.CharField(max_length=128)
     curso   = models.ForeignKey(Curso, on_delete=models.CASCADE)
     periodo = models.PositiveSmallIntegerField()
-    disciplinas_concluidas = models.ManyToManyField(DisciplinaMatriz, symmetrical=False, blank=True)
-    
+    disciplinas_concluidas = models.ManyToManyField(
+        DisciplinaMatriz,
+        symmetrical=False,
+        blank=True,
+        through='UsuarioDisciplinasConcluidas',
+        related_name='usuarios_concluintes'
+    )    
     def __str__(self):
         return self.nome
     
@@ -85,6 +90,13 @@ class Usuario(models.Model):
     #   usuario.save()                         
     #   return usuario
 
+class UsuarioDisciplinasConcluidas(models.Model):
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, to_field='nome')
+    disciplina = models.ForeignKey(DisciplinaMatriz, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'grafoNaHora_usuario_disciplinas_concluidas'
+        unique_together = ('usuario', 'disciplina')
 
 class Feedback(models.Model):
     # id auto
