@@ -44,7 +44,7 @@ export class DisciplineService {
   updateUserDisciplines(username: string, disciplinesIds: string[]): Observable<ApiResponse> {
   return this.http.post<ApiResponse>(
     `http://localhost:8000/usuarios/${username}/disciplinas_concluidas/`,
-    { disciplinas: disciplinesIds }
+    { 'disciplinas_concluidas':disciplinesIds }
   );
 }
 }

@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
+  FormControl,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -24,6 +25,7 @@ interface Discipline {
   selector: 'app-config-modal',
   templateUrl: './config-modal.component.html',
   styleUrls: ['./config-modal.component.scss'],
+  standalone: true,
   imports: [
     DialogModule,
     ButtonModule,
@@ -35,17 +37,18 @@ interface Discipline {
     InputTextModule
   ],
 })
-export class ConfigModalComponent {
+export class ConfigModalComponent implements OnInit {
   visible = false;
-  formGroup: FormGroup;
+  formGroup!: FormGroup;
 
   disciplines: Discipline[] = [];
-  selectedDisciplines: string[] = [];
   deleteUser = "";
 
-  constructor(private fb: FormBuilder, private disciplineService: DisciplineService) {
+  constructor(private fb: FormBuilder, private disciplineService: DisciplineService) {}
+
+  ngOnInit() {
     this.formGroup = this.fb.group({
-      disciplines: [[], Validators.required]
+      disciplines: new FormControl<Discipline[] | null>([], Validators.required)
     });
   }
 
@@ -55,7 +58,6 @@ export class ConfigModalComponent {
   }
 
   loadDisciplines() {
-    // 1. Pega todas as disciplinas
     this.disciplineService.getDisciplines().subscribe(allResp => {
       if (allResp.success) {
         this.disciplines = allResp.data.map(d => ({
@@ -64,36 +66,28 @@ export class ConfigModalComponent {
           concluida: false
         }));
 
-        // 2. Pega as disciplinas concluídas do usuário "jean"
-        this.disciplineService.getDisciplines({usuario:'jean'}).subscribe(userResp => {
+        this.disciplineService.getDisciplines({ usuario: 'jean' }).subscribe(userResp => {
           if (userResp.success) {
             const concluidas = new Set(userResp.data.map(d => d.id));
 
-            // Marca as disciplinas como concluídas
             this.disciplines.forEach(d => {
-              if (concluidas.has(d.id)) {
-                d.concluida = true;
-              }
+              d.concluida = concluidas.has(d.id);
             });
 
-            // Atualiza as selecionadas no formulário
-            this.selectedDisciplines = this.disciplines
-              .filter(d => d.concluida)
-              .map(d => d.id);
-            this.formGroup.controls['disciplines'].setValue(this.selectedDisciplines);
+            const selecionadas = this.disciplines.filter(d => d.concluida);
+            this.formGroup.get('disciplines')?.setValue(selecionadas);
           }
         });
       }
     });
   }
 
-
   submitChanges() {
     if (this.formGroup.valid) {
-      const selecionadas = this.formGroup.value.disciplines; // array de ids
+      const selecionadas: Discipline[] = this.formGroup.value.disciplines;
+      const idsSelecionados = selecionadas.map(d => d.id);
 
-      // Enviar para o backend para salvar as disciplinas concluídas do usuário "jean"
-      this.disciplineService.updateUserDisciplines('jean', selecionadas).subscribe({
+      this.disciplineService.updateUserDisciplines('jean', idsSelecionados).subscribe({
         next: (response) => {
           if (response.success) {
             this.visible = false;

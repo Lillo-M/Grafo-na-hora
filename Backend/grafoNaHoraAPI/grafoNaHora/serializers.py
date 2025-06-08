@@ -19,7 +19,7 @@ class DisciplinaMatrizDetalhadaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DisciplinaMatriz
-        fields = ['nome', 'periodo', 'nome_optativa', 'carga_horaria', 'pre_requisitos']
+        fields = ['id', 'nome', 'periodo', 'nome_optativa', 'carga_horaria', 'pre_requisitos']
 
     def get_pre_requisitos(self, obj):
         return [pr.disciplina.nome for pr in obj.disciplinas_prerequisitos.all()]
