@@ -14,6 +14,11 @@ import { DisciplineService } from '../../../services/discipline.service';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 
+interface Discipline {
+  id: string;
+  name: string;
+  concluida: boolean;
+}
 
 @Component({
   selector: 'app-config-modal',
@@ -34,8 +39,9 @@ export class ConfigModalComponent {
   visible = false;
   formGroup: FormGroup;
 
-  disciplines: { id: string; name: string }[] = [];
+  disciplines: Discipline[] = [];
   selectedDisciplines: string[] = [];
+  deleteUser = "";
 
   constructor(private fb: FormBuilder, private disciplineService: DisciplineService) {
     this.formGroup = this.fb.group({
@@ -49,25 +55,38 @@ export class ConfigModalComponent {
   }
 
   loadDisciplines() {
-    // Passar filtro do usuário "jean" para pegar disciplinas concluídas
-    this.disciplineService.getDisciplines({ usuario: 'jean' }).subscribe(response => {
-      if (response.success) {
-        // Mapeia todas as disciplinas para o dropdown
-        this.disciplines = response.data.map(d => ({
-          id: d.id,  // supondo que o id venha da API, se não, ajuste para o campo correto
-          name: d.nome
+    // 1. Pega todas as disciplinas
+    this.disciplineService.getDisciplines().subscribe(allResp => {
+      if (allResp.success) {
+        this.disciplines = allResp.data.map(d => ({
+          id: d.id,
+          name: d.nome,
+          concluida: false
         }));
 
-        // Pega as disciplinas marcadas como concluídas
-        this.selectedDisciplines = response.data
-          .filter(d => d.concluida) // seu backend deve enviar uma flag 'concluida' em cada disciplina
-          .map(d => d.id);
+        // 2. Pega as disciplinas concluídas do usuário "jean"
+        this.disciplineService.getDisciplines({usuario:'jean'}).subscribe(userResp => {
+          if (userResp.success) {
+            const concluidas = new Set(userResp.data.map(d => d.id));
 
-        // Atualiza o formulário com as disciplinas selecionadas
-        this.formGroup.controls['disciplines'].setValue(this.selectedDisciplines);
+            // Marca as disciplinas como concluídas
+            this.disciplines.forEach(d => {
+              if (concluidas.has(d.id)) {
+                d.concluida = true;
+              }
+            });
+
+            // Atualiza as selecionadas no formulário
+            this.selectedDisciplines = this.disciplines
+              .filter(d => d.concluida)
+              .map(d => d.id);
+            this.formGroup.controls['disciplines'].setValue(this.selectedDisciplines);
+          }
+        });
       }
     });
   }
+
 
   submitChanges() {
     if (this.formGroup.valid) {
