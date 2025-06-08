@@ -16,6 +16,7 @@ import { Router } from '@angular/router';
 import { DrawerModule } from 'primeng/drawer';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
+import { GraphComponent } from './graph/graph.component';
 
 @Component({
   selector: 'app-home-page',
@@ -23,6 +24,7 @@ import { ButtonModule } from 'primeng/button';
   imports: [
     InputTextModule,
     FilterButtonComponent,
+    GraphComponent,
     GraphNodeComponent,
     FeedbackModalComponent,
     CardModule,
@@ -38,13 +40,17 @@ export class HomePageComponent implements AfterViewInit {
   @ViewChild('filter') filterDiv!: ElementRef<HTMLDivElement>;
   router = inject(Router);
   drawerVisible: boolean = false;
+  selectedDiscplina?: Disciplina;
+  disciplinaDict: { [cursoId: string] : Disciplina; } = {};
 
   ngOnInit() {
     let temp = sessionStorage.getItem('token');
     if (!temp || temp != 'testaNaAPI') {
       // Testa na API se o token existe e está válido.
       this.router.navigate(['/login']);
+      return;
     }
+
   }
 
   ngAfterViewInit() {
@@ -59,7 +65,8 @@ export class HomePageComponent implements AfterViewInit {
       { passive: false }
     );
   }
-  showDisciplineInfo() {
+  showDisciplineInfo(cursoId?:string) {
+    this.selectedDiscplina = this.disciplinaDict[cursoId ?? ''];
     this.drawerVisible = true;
   }
 }

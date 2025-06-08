@@ -37,7 +37,8 @@
     <app-filter-button [text]="'TrilhaB'"></app-filter-button>
     <app-filter-button [text]="'TrilhaB'"></app-filter-button>
   </div>
-  <div id="graph">
+  <div id="grafo">
+    <app-graph (showDrawer)="showDisciplineInfo()"></app-graph>
     <app-graph-node
       discipline="Cálculo 3"
       period="3"
@@ -45,7 +46,6 @@
     ></app-graph-node>
   </div>
   <p-drawer header="Física 2" [(visible)]="drawerVisible" position="right">
-    <p>Rafael Barrets</p>
     <div class="flex items-center gap-2">
       <label for="optativaCB" class="cursor-pointer">Optativa</label>
       <p-checkbox inputId="optativaCB" [binary]="true"></p-checkbox>
