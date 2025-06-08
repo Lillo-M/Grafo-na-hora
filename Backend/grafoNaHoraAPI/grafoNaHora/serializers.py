@@ -1,6 +1,6 @@
 # serializers.py
 from rest_framework import serializers
-from .models import Disciplina, DisciplinaMatriz
+from .models import Disciplina, DisciplinaMatriz, Usuario
 
 class DisciplinaSerializer(serializers.ModelSerializer):
     class Meta:
@@ -18,3 +18,20 @@ class DisciplinaMatrizDetalhadaSerializer(serializers.ModelSerializer):
 
     def get_pre_requisitos(self, obj):
         return [pr.disciplina.nome for pr in obj.disciplinas_prerequisitos.all()]
+
+class UsuarioCadastroSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Usuario
+        fields = ['nome', 'email', 'senha', 'curso', 'periodo']
+
+    def create(self, validated_data):
+        senha_raw = validated_data.pop('senha')
+        usuario = Usuario(**validated_data)
+        usuario.set_password(senha_raw)
+        usuario.save()
+        return usuario
+
+
+class UsuarioLoginSerializer(serializers.Serializer):
+    nome = serializers.CharField()
+    senha = serializers.CharField()

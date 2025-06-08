@@ -7,8 +7,8 @@ from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.views import APIView
 
-from .models import Curso, DisciplinaMatriz, Disciplina
-from .serializers import DisciplinaSerializer
+from .models import Curso, DisciplinaMatriz, Disciplina, Usuario
+from .serializers import DisciplinaSerializer, UsuarioCadastroSerializer, UsuarioLoginSerializer
 
 schema_view = get_swagger_view(title='GrafoNaHora API')
 
@@ -54,3 +54,29 @@ class DisciplinasPorCursoView(APIView):
             "message": f"Disciplinas do curso {curso.nome}",
             "data": serializer.data
         })
+
+
+class CadastroView(APIView):
+    def post(self, request):
+        serializer = UsuarioCadastroSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'success': True, 'message': 'Usuário cadastrado com sucesso'}, status=status.HTTP_201_CREATED)
+        return Response({'success': False, 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class LoginView(APIView):
+    def post(self, request):
+        serializer = UsuarioLoginSerializer(data=request.data)
+        if serializer.is_valid():
+            nome = serializer.validated_data['nome']
+            senha = serializer.validated_data['senha']
+            try:
+                usuario = Usuario.objects.get(nome=nome)
+                if usuario.check_password(senha):
+                    return Response({'success': True, 'message': 'Login bem-sucedido'})
+                else:
+                    return Response({'success': False, 'message': 'Senha incorreta'}, status=status.HTTP_401_UNAUTHORIZED)
+            except Usuario.DoesNotExist:
+                return Response({'success': False, 'message': 'Usuário não encontrado'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'success': False, 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)

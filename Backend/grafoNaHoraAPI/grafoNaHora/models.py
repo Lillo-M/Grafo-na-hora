@@ -64,7 +64,7 @@ class Usuario(models.Model):
     
     def set_password(self, raw_password):
         self.senha = make_password(raw_password) # gera hash da senha
-        self.save(update_fields=['senha'])
+        self.save()
     def check_password(self, raw_password):
         return check_password(raw_password, self.senha) # verifica se hash da senha bate
 

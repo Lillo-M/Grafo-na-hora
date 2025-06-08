@@ -5,6 +5,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
 import { MessageModule } from 'primeng/message';
+import { Router } from '@angular/router';
+import { UserService } from '../../services/user.service';
 
 
 @Component({
@@ -31,12 +33,19 @@ export class RegisterPageComponent {
   emailError = '';
   passwordError = '';
   confirmPasswordError = '';
+  feedbackMessage = '';
 
+  constructor(
+    private userService: UserService,
+    private router: Router
+  ) {}
+  
   register() {
     this.usernameError = '';
     this.emailError = '';
     this.passwordError = '';
     this.confirmPasswordError = '';
+    this.feedbackMessage = '';
 
     let valid = true;
 
@@ -63,8 +72,25 @@ export class RegisterPageComponent {
     if (!valid) {
       return;
     }
+    // Add mensagem de erro como no login
+    // console.log('Cadastrar usuário', this.username, this.email);
+    // Adicionar campo de período
+    const payload = {
+      nome: this.username,
+      email: this.email,
+      senha: this.password,
+      curso: 1, 
+      periodo: 1, // Exemplo de curso, deve ser substituído por um valor real
+    };
 
-    console.log('Cadastrar usuário', this.username, this.email);
-    
+    this.userService.cadastrarUsuario(payload).subscribe({
+      next: (res) => {
+        this.feedbackMessage = res.message;
+        this.router.navigate(['/login']);
+      },
+      error: (err) => {
+        this.feedbackMessage = err.error.message || 'Erro ao cadastrar usuário.';
+      },
+    });
   }
 }

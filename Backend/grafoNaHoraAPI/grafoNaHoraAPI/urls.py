@@ -21,7 +21,7 @@ from django.urls import path, re_path
 from rest_framework.permissions import AllowAny
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-from grafoNaHora.views import DisciplinasPorCursoView
+from grafoNaHora.views import DisciplinasPorCursoView, CadastroView, LoginView
 
 
 
@@ -41,5 +41,7 @@ urlpatterns = [
     re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path('cursos/<int:curso_id>/disciplinas/', DisciplinasPorCursoView.as_view()),
+    path('usuarios/cadastrar/', CadastroView.as_view(), name='cadastrar_usuario'),
+    path('usuarios/login/', LoginView.as_view(), name='login_usuario'),
 
 ]

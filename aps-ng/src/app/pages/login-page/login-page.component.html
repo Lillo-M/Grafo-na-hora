@@ -27,8 +27,11 @@
         <p-button label="Entrar" (onClick)="onSubmit()" />
       </div>
     </form>
+    <div class="card flex justify-center">
+      <p-button label="Cadastrar" (onClick)="registerOnClick()" />
+    </div>
     @if (errorMessage != '') {
-    <div class="items-center absolute top-40">
+    <div class="items-center absolute top-55">
       <p-message [life]="3000" class="text-center" severity="error">{{ errorMessage }}</p-message>
     </div>
     }

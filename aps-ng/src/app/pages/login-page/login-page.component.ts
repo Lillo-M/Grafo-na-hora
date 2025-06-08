@@ -19,6 +19,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { Router } from '@angular/router';
 import { debounceTime, interval, Subject, throttle } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -45,7 +46,7 @@ export class LoginComponent {
   destroyRef = inject(DestroyRef);
   changeRef = inject(ChangeDetectorRef);
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private userService: UserService) {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
       password: ['', Validators.required],
@@ -86,14 +87,25 @@ export class LoginComponent {
 
     const { username, password } = this.loginForm.value;
 
-    // Simulação de login
-    if (username === 'admin' && password === 'admin') {
-      sessionStorage.setItem('token', 'testaNaAPI'); // Seta Token com oq recebeu da API
-      this.router.navigate(['/home']);
-    } else {
-      this.errorMessage = 'Usuário ou senha inválidos.';
-      this.invalidCredentials = true;
-      this.sub.next(0); // Retira a mensagem após o tempo registrado na subscrição.
-    }
+    this.userService.logarUsuario({
+      nome: username,
+      senha: password,
+      }).subscribe({
+        next: (response) => {
+          if (response.success) {
+            sessionStorage.setItem('token', response.token || 'testaNaAPI'); // Seta Token com oq recebeu da API
+            this.router.navigate(['/home']);
+          }
+        },
+        error: (error) => {
+            console.error('Erro ao fazer login:', error);
+            this.errorMessage = error.error?.message || "Erro ao fazer login. Tente novamente.";
+            this.invalidCredentials = true;
+            this.sub.next(0); // Retira a mensagem após o tempo registrado na subscrição.
+        },
+    })
+  }
+  registerOnClick() {
+    this.router.navigate(['/register']);
   }
 }
