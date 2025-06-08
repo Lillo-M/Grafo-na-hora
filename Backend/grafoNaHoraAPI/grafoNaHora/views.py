@@ -7,8 +7,8 @@ from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.views import APIView
 
-from .models import Curso, DisciplinaMatriz, Disciplina, Usuario
-from .serializers import UsuarioCadastroSerializer, UsuarioLoginSerializer, AtualizaDisciplinasConcluidasSerializer, DisciplinaMatrizDetalhadaSerializer, DisciplinaMatrizSerializer
+from .models import Curso, DisciplinaMatriz, Disciplina, Usuario, Feedback
+from .serializers import UsuarioCadastroSerializer, UsuarioLoginSerializer, AtualizaDisciplinasConcluidasSerializer, DisciplinaMatrizDetalhadaSerializer, DisciplinaMatrizSerializer, FeedbackSerializer
 
 schema_view = get_swagger_view(title='GrafoNaHora API')
 
@@ -100,4 +100,12 @@ class LoginView(APIView):
                     return Response({'success': False, 'message': 'Senha incorreta'}, status=status.HTTP_401_UNAUTHORIZED)
             except Usuario.DoesNotExist:
                 return Response({'success': False, 'message': 'Usuário não encontrado'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'success': False, 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+    
+class FeedbackCreateView(APIView):
+    def post(self, request):
+        serializer = FeedbackSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'success': True, 'data': serializer.data}, status=status.HTTP_201_CREATED)
         return Response({'success': False, 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)

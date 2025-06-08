@@ -8,6 +8,7 @@ import {
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { TextareaModule } from 'primeng/textarea';
+import { FeedbackService } from '../../../services/feedback.service';
 
 @Component({
   selector: 'app-feedback-modal',
@@ -20,7 +21,10 @@ export class FeedbackModalComponent {
   visible: boolean = false;
   formGroup: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private feedbackService: FeedbackService
+  ) {
     this.formGroup = this.fb.group({
       text: ['', Validators.required],
     });
@@ -32,10 +36,21 @@ export class FeedbackModalComponent {
 
   submitFeedback() {
     if (this.formGroup.valid) {
-      const feedback = this.formGroup.value.text;
-      console.log('Feedback enviado:', feedback);
-      this.visible = false;
-      this.formGroup.reset();
+      const texto = this.formGroup.value.text;
+      const usuario = 'jean'; // você pode tornar isso dinâmico futuramente
+
+      this.feedbackService.sendFeedback({ texto, usuario }).subscribe({
+        next: (res) => {
+          if (res.success) {
+            alert('Feedback enviado com sucesso!');
+            this.visible = false;
+            this.formGroup.reset();
+          } else {
+            alert('Erro ao enviar feedback');
+          }
+        },
+        error: () => alert('Erro de conexão ao enviar feedback'),
+      });
     }
   }
 }

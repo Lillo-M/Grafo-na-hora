@@ -1,6 +1,6 @@
 # serializers.py
 from rest_framework import serializers
-from .models import Disciplina, DisciplinaMatriz, Usuario
+from .models import Disciplina, DisciplinaMatriz, Usuario, Feedback
 
 class DisciplinaMatrizSerializer(serializers.ModelSerializer):
     class Meta:
@@ -40,3 +40,8 @@ class UsuarioCadastroSerializer(serializers.ModelSerializer):
 class UsuarioLoginSerializer(serializers.Serializer):
     nome = serializers.CharField()
     senha = serializers.CharField()
+
+class FeedbackSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Feedback
+        fields = ['id', 'texto', 'usuario']
