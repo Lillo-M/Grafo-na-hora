@@ -11,5 +11,5 @@ sqlite3 "$DB" <<EOF
 .import csv_db/optativa.csv grafoNaHora_optativa
 .import csv_db/disciplina_matriz.csv grafoNaHora_disciplinamatriz
 .import csv_db/disciplinas_prerequisitos.csv grafoNaHora_disciplinamatriz_disciplinas_prerequisitos
-
+UPDATE grafoNaHora_disciplinamatriz SET optativa_id = NULL WHERE optativa_id = "";
 EOF

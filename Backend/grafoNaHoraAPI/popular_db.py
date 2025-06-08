@@ -35,6 +35,13 @@ def main():
     cursor = conn.cursor()
     for csv_file, table in csv_to_table.items():
         import_csv_to_table(cursor, csv_file, table)
+    
+    cursor.execute("""
+        UPDATE grafoNaHora_disciplinamatriz
+        SET optativa_id = NULL
+        WHERE optativa_id = '';
+    """)
+
     conn.commit()
     conn.close()
 
