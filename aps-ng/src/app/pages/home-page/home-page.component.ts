@@ -77,4 +77,39 @@ export class HomePageComponent implements AfterViewInit {
     this.selectedDiscpline = this.disciplineDict[cursoId ?? ''];
     this.drawerVisible = true;
   }
+  concludeClick() {
+    if (!this.selectedDiscpline) return;
+
+    const disciplinaSelecionada = this.selectedDiscpline;
+
+    this.disciplineService.getDisciplines({ usuario: 'jean' }).subscribe({
+      next: (response) => {
+        if (response.success) {
+          const disciplinasConcluidas = response.data.map(d => d.id);
+
+          if (disciplinasConcluidas.includes(disciplinaSelecionada.id)) {
+            this.drawerVisible = false;
+            return;
+          }
+
+          disciplinasConcluidas.push(disciplinaSelecionada.id);
+
+          this.disciplineService.updateUserDisciplines('jean', disciplinasConcluidas).subscribe({
+            next: (res) => {
+              if (res.success) {
+                this.drawerVisible = false;
+              } else {
+                alert('Erro ao salvar disciplinas concluídas');
+              }
+            },
+            error: () => alert('Erro de conexão ao salvar disciplinas concluídas'),
+          });
+        } else {
+          alert('Erro ao obter disciplinas concluídas');
+        }
+      },
+      error: () => alert('Erro ao carregar disciplinas do usuário')
+    });
+  }
+
 }
