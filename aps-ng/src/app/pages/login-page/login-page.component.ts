@@ -20,6 +20,7 @@ import { Router } from '@angular/router';
 import { debounceTime, interval, Subject, throttle } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { UserService } from '../../services/user.service';
+import { FeedbackModalComponent } from '../home-page/feedback-modal/feedback-modal.component';
 
 @Component({
   selector: 'app-login',
@@ -32,6 +33,7 @@ import { UserService } from '../../services/user.service';
     MessageModule,
     InputTextModule,
     FloatLabelModule,
+    FeedbackModalComponent,
   ],
   styleUrls: ['./login-page.component.scss'],
 })
@@ -104,6 +106,9 @@ export class LoginComponent {
             this.sub.next(0); // Retira a mensagem após o tempo registrado na subscrição.
         },
     })
+  }
+  recoverPasswordOnClick() {
+
   }
   registerOnClick() {
     this.router.navigate(['/register']);

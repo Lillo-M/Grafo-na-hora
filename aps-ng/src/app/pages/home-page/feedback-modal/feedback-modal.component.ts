@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -18,6 +18,8 @@ import { FeedbackService } from '../../../services/feedback.service';
   styleUrl: './feedback-modal.component.scss',
 })
 export class FeedbackModalComponent {
+  @Input() buttonLabel: string = 'Enviar feedback'; // nome do botão configurável
+
   visible: boolean = false;
   formGroup: FormGroup;
 
