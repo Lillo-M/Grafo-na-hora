@@ -12,6 +12,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { DisciplineService } from '../../../services/discipline.service';
+import { UserService } from '../../../services/user.service';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 
@@ -44,7 +45,7 @@ export class ConfigModalComponent implements OnInit {
   disciplines: Discipline[] = [];
   deleteUser = "";
 
-  constructor(private fb: FormBuilder, private disciplineService: DisciplineService) {}
+  constructor(private fb: FormBuilder, private disciplineService: DisciplineService, private userService: UserService) {}
 
   ngOnInit() {
     this.formGroup = this.fb.group({
@@ -99,5 +100,31 @@ export class ConfigModalComponent implements OnInit {
         error: () => alert('Erro de conexão ao salvar disciplinas concluídas')
       });
     }
+  }
+  deleteUserClick() {
+    const username = this.deleteUser.trim();
+
+    if (!username) {
+      alert('Por favor, informe o nome do usuário a ser deletado.');
+      return;
+    }
+
+    if (!confirm(`Tem certeza que deseja deletar o usuário "${username}"?`)) {
+      return;
+    }
+
+    this.userService.deleteUser(username).subscribe({
+      next: (response) => {
+        if (response.success) {
+          alert(`Usuário "${username}" deletado com sucesso.`);
+          this.deleteUser = '';
+        } else {
+          alert(`Erro ao deletar usuário: ${response.message}`);
+        }
+      },
+      error: () => {
+        alert('Erro de conexão ao tentar deletar o usuário.');
+      }
+    });
   }
 }

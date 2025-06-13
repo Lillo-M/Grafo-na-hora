@@ -39,7 +39,7 @@ export class FeedbackModalComponent {
   submitFeedback() {
     if (this.formGroup.valid) {
       const texto = this.formGroup.value.text;
-      const usuario = 'jean'; // você pode tornar isso dinâmico futuramente
+      const usuario = 'jean'; 
 
       this.feedbackService.sendFeedback({ texto, usuario }).subscribe({
         next: (res) => {

@@ -38,7 +38,7 @@ class DisciplinasPorCursoView(APIView):
             disciplinas_matriz = disciplinas_matriz.filter(optativa__id=optativa_id)
 
         if periodo:
-            disciplinas_matriz = disciplinas_matriz.filter(periodo=periodo)
+            disciplinas_matriz = disciplinas_matriz.filter(periodo=periodo) 
 
         if usuario_nome:
             try:
@@ -109,3 +109,12 @@ class FeedbackCreateView(APIView):
             serializer.save()
             return Response({'success': True, 'data': serializer.data}, status=status.HTTP_201_CREATED)
         return Response({'success': False, 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+    
+class DeleteUserView(APIView):
+    def delete(self, request, nome):
+        try:
+            usuario = Usuario.objects.get(nome=nome)
+            usuario.delete()
+            return Response({'success': True, 'message': f'Usuário {nome} deletado com sucesso.'}, status=status.HTTP_200_OK)
+        except Usuario.DoesNotExist:
+            return Response({'success': False, 'message': 'Usuário não encontrado.'}, status=status.HTTP_404_NOT_FOUND)

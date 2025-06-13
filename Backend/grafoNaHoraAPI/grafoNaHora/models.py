@@ -57,6 +57,7 @@ class Usuario(models.Model):
     senha   = models.CharField(max_length=128)
     curso   = models.ForeignKey(Curso, on_delete=models.CASCADE)
     periodo = models.PositiveSmallIntegerField()
+    admin = models.BooleanField(default=False) # True se for admin, False se for usuario comum
     disciplinas_concluidas = models.ManyToManyField(
         DisciplinaMatriz,
         symmetrical=False,
