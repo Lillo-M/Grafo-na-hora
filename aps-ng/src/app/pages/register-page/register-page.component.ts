@@ -28,12 +28,14 @@ export class RegisterPageComponent {
   email = '';
   password = '';
   confirmPassword = '';
+  semester = '';
 
   usernameError = '';
   emailError = '';
   passwordError = '';
   confirmPasswordError = '';
   feedbackMessage = '';
+  semesterError = '';
 
   constructor(
     private userService: UserService,
@@ -46,6 +48,7 @@ export class RegisterPageComponent {
     this.passwordError = '';
     this.confirmPasswordError = '';
     this.feedbackMessage = '';
+    this.semesterError = '';
 
     let valid = true;
 
@@ -69,6 +72,11 @@ export class RegisterPageComponent {
       valid = false;
     }
 
+    if (this.semester == '') {
+      this.semesterError = 'O campo Período é obrigatório.';
+      valid = false;
+    }
+    
     if (!valid) {
       return;
     }
@@ -80,7 +88,7 @@ export class RegisterPageComponent {
       email: this.email,
       senha: this.password,
       curso: 1, 
-      periodo: 1, // Exemplo de curso, deve ser substituído por um valor real
+      periodo: Number(this.semester),
     };
 
     this.userService.cadastrarUsuario(payload).subscribe({

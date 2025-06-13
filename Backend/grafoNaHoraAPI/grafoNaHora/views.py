@@ -8,7 +8,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 
 from .models import Curso, DisciplinaMatriz, Disciplina, Usuario, Feedback
-from .serializers import UsuarioCadastroSerializer, UsuarioLoginSerializer, AtualizaDisciplinasConcluidasSerializer, DisciplinaMatrizDetalhadaSerializer, DisciplinaMatrizSerializer, FeedbackSerializer
+from .serializers import UsuarioCadastroSerializer, UsuarioLoginSerializer, AtualizaDisciplinasConcluidasSerializer, DisciplinaMatrizDetalhadaSerializer, DisciplinaMatrizSerializer, FeedbackSerializer, UsuarioUpdateSerializer
 
 schema_view = get_swagger_view(title='GrafoNaHora API')
 
@@ -101,6 +101,20 @@ class LoginView(APIView):
             except Usuario.DoesNotExist:
                 return Response({'success': False, 'message': 'Usuário não encontrado'}, status=status.HTTP_404_NOT_FOUND)
         return Response({'success': False, 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+    
+class UpdateUserView(APIView):
+    def put(self, request, nome):
+        try:
+            usuario = Usuario.objects.get(nome=nome)
+        except Usuario.DoesNotExist:
+            return Response({'success': False, 'message': 'Usuário não encontrado'}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = UsuarioUpdateSerializer(usuario, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'success': True, 'message': 'Usuário atualizado com sucesso'})
+        return Response({'success': False, 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
     
 class FeedbackCreateView(APIView):
     def post(self, request):

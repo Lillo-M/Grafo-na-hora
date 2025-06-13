@@ -41,6 +41,20 @@ class UsuarioLoginSerializer(serializers.Serializer):
     nome = serializers.CharField()
     senha = serializers.CharField()
 
+class UsuarioUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Usuario
+        fields = ['email', 'senha', 'curso', 'periodo']
+
+    def update(self, instance, validated_data):
+        senha = validated_data.pop('senha', None)
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        if senha:
+            instance.set_password(senha)
+        instance.save()
+        return instance
+
 class FeedbackSerializer(serializers.ModelSerializer):
     class Meta:
         model = Feedback

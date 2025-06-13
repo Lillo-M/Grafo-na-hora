@@ -44,6 +44,7 @@ export class ConfigModalComponent implements OnInit {
 
   disciplines: Discipline[] = [];
   deleteUser = "";
+  semester = '';
 
   constructor(private fb: FormBuilder, private disciplineService: DisciplineService, private userService: UserService) {}
 
@@ -99,6 +100,21 @@ export class ConfigModalComponent implements OnInit {
         },
         error: () => alert('Erro de conexão ao salvar disciplinas concluídas')
       });
+
+      if (this.semester != '') {
+        const updatePayload = {
+          periodo: Number(this.semester),
+        };
+
+        this.userService.updateUser('jean', updatePayload).subscribe({
+          next: (response) => {
+            if (!response.success) {
+              alert('Erro ao atualizar período do usuário');
+            }
+          },
+          error: () => alert('Erro de conexão ao atualizar período')
+        });
+      }
     }
   }
   deleteUserClick() {

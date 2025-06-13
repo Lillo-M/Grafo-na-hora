@@ -44,6 +44,11 @@
         [panelStyle]="{ width: '400px' }"
       ></p-multiselect>
     </form>
+    <div id="update-semester" style="display: flex; align-items: center; gap: 1rem">
+      <div style="flex-grow: 1;">
+        <input pInputText type="number" [(ngModel)]="semester" placeholder="Período" />
+      </div>
+    </div>
   </div>
   <ng-template pTemplate="footer">
     <p-button

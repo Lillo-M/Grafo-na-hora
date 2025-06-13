@@ -74,6 +74,23 @@
         <p-message *ngIf="confirmPasswordError" severity="error" [text]="confirmPasswordError" class="mt-1"></p-message>
       </div>
 
+      <div class="field mb-4">
+        <p-floatlabel variant="on">
+          <input
+            id="semester"
+            type="number"
+            pInputText
+            [(ngModel)]="semester"
+            placeholder=" "
+            class="w-full"
+            variant="filled"
+            pSize="small"
+          />
+          <label for="semester">Período atual</label>
+        </p-floatlabel>
+        <p-message *ngIf="semesterError" severity="error" [text]="semesterError" class="mt-1"></p-message>
+      </div>
+
       <button
         pButton
         type="button"

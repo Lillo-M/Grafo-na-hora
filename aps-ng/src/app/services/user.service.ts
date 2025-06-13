@@ -10,6 +10,12 @@ interface UserPayload {
   curso: number;
   periodo: number;
 }
+interface UserUpdatePayload {
+  email?: string;
+  senha?: string;
+  curso?: number;
+  periodo?: number;
+}
 
 interface LoginPayload {
   nome: string;
@@ -24,7 +30,7 @@ interface ApiResponse {
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
-  private baseUrl = 'http://localhost:8000/usuarios/';
+  private baseUrl = 'http://localhost:8000/usuarios';
 
   constructor(private http: HttpClient) {}
 
@@ -35,7 +41,12 @@ export class UserService {
   logarUsuario(payload: LoginPayload): Observable<ApiResponse> {
     return this.http.post<ApiResponse>(`${this.baseUrl}/login/`, payload);
   }
+
   deleteUser(username: string): Observable<DeleteUserResponse> {
-    return this.http.delete<DeleteUserResponse>(`${this.baseUrl}${username}/delete/`);
+    return this.http.delete<DeleteUserResponse>(`${this.baseUrl}/${username}/delete/`);
+  }
+
+  updateUser(username: string, payload: UserUpdatePayload): Observable<ApiResponse> {
+    return this.http.put<ApiResponse>(`${this.baseUrl}/${username}/update/`, payload);
   }
 }
