@@ -32,9 +32,9 @@
     </div>
     <app-feedback-modal buttonLabel="Esqueci minha senha"></app-feedback-modal>
     @if (errorMessage != '') {
-    <div class="items-center absolute top-66">
-      <p-message [life]="3000" class="text-center" severity="error">{{ errorMessage }}</p-message>
-    </div>
+      <div class="absolute top-66 left-1/2 transform -translate-x-1/2">
+        <p-message [life]="3000" class="text-center" severity="error">{{ errorMessage }}</p-message>
+      </div>
     }
   </div>
 </div>
