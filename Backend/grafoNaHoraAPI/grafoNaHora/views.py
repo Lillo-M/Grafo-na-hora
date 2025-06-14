@@ -30,20 +30,47 @@ class DisciplinasPorCursoView(APIView):
         disciplinas_matriz = DisciplinaMatriz.objects.filter(matriz__curso=curso)
 
         # Filtros opcionais
-        optativa_id = request.query_params.get('optativa')
-        periodo = request.query_params.get('periodo')
+        optativas_param = request.query_params.get('optativas')
+        periodo_inicio = request.query_params.get('periodo_inicio')
+        periodo_fim = request.query_params.get('periodo_fim')
         usuario_nome = request.query_params.get('usuario')
+        concluidas_param = request.query_params.get('concluidas')
 
-        if optativa_id:
-            disciplinas_matriz = disciplinas_matriz.filter(optativa__id=optativa_id)
+        # Múltiplas optativas (ex: optativas=1,3,5)
+        if optativas_param:
+            try:
+                optativas_ids = [int(opt) for opt in optativas_param.split(',')]
+                disciplinas_matriz = disciplinas_matriz.filter(optativa__id__in=optativas_ids)
+            except ValueError:
+                return Response({
+                    "success": False,
+                    "message": "Parâmetro 'optativas' inválido. Use uma lista separada por vírgulas, ex: optativas=1,3,5.",
+                    "data": []
+                }, status=status.HTTP_400_BAD_REQUEST)
 
-        if periodo:
-            disciplinas_matriz = disciplinas_matriz.filter(periodo=periodo) 
+        # Intervalo de períodos
+        if periodo_inicio or periodo_fim:
+            try:
+                if periodo_inicio is None or periodo_inicio == '':
+                    periodo_inicio = 0
+                else:
+                    periodo_inicio = int(periodo_inicio)
+                if periodo_fim is None or periodo_fim == '':
+                    periodo_fim = 10
+                else :
+                    periodo_fim = int(periodo_fim)
+                disciplinas_matriz = disciplinas_matriz.filter(periodo__gte=periodo_inicio, periodo__lte=periodo_fim)
+            except ValueError:
+                return Response({
+                    "success": False,
+                    "message": "Parâmetros 'periodo_inicio' e 'periodo_fim' devem ser inteiros.",
+                    "data": []
+                }, status=status.HTTP_400_BAD_REQUEST)
 
+        usuario = None
         if usuario_nome:
             try:
                 usuario = Usuario.objects.get(nome=usuario_nome)
-                disciplinas_matriz = disciplinas_matriz.filter(id__in=usuario.disciplinas_concluidas.values_list('id', flat=True))
             except Usuario.DoesNotExist:
                 return Response({
                     "success": False,
@@ -51,14 +78,37 @@ class DisciplinasPorCursoView(APIView):
                     "data": []
                 }, status=status.HTTP_404_NOT_FOUND)
 
+        # Filtro de concluídas / não concluídas
+        if concluidas_param is not None:
+            if not usuario:
+                return Response({
+                    "success": False,
+                    "message": "Usuário precisa ser informado para aplicar o filtro de concluídas.",
+                    "data": []
+                }, status=status.HTTP_400_BAD_REQUEST)
+
+            concluidas_ids = usuario.disciplinas_concluidas.values_list('id', flat=True)
+
+            if concluidas_param.lower() == 'true':
+                disciplinas_matriz = disciplinas_matriz.filter(id__in=concluidas_ids)
+            elif concluidas_param.lower() == 'false':
+                disciplinas_matriz = disciplinas_matriz.exclude(id__in=concluidas_ids)
+            else:
+                return Response({
+                    "success": False,
+                    "message": "Valor inválido para 'concluidas'. Use 'true' ou 'false'.",
+                    "data": []
+                }, status=status.HTTP_400_BAD_REQUEST)
+
         disciplinas_matriz = disciplinas_matriz.select_related('disciplina', 'optativa').prefetch_related('disciplinas_prerequisitos')
 
         serializer = DisciplinaMatrizDetalhadaSerializer(disciplinas_matriz, many=True)
         return Response({
             "success": True,
-            "message": f"Disciplinas do curso {curso.nome}" + (f" concluídas por {usuario_nome}" if usuario_nome else ""),
+            "message": f"Disciplinas do curso {curso.nome}",
             "data": serializer.data
-        })
+        }, status=status.HTTP_200_OK)
+
 
 class DisciplinasConcluidasView(APIView):
     def post(self, request, nome_usuario):

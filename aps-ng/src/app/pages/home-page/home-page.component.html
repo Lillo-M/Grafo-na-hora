@@ -34,8 +34,6 @@
      style="scrollbar-width: none; -ms-overflow-style: none;">
 
   <app-filter-button [text]="'Concluídas'"></app-filter-button>
-  <app-filter-button [text]="'Pendentes'"></app-filter-button>
-  <app-filter-button [text]="'Optativas'"></app-filter-button>
 
   <ng-container *ngFor="let optativa of optativas">
     <app-filter-button [text]="optativa.nome" [attr.data-id]="optativa.id"></app-filter-button>
