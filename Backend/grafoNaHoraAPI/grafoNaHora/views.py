@@ -229,7 +229,11 @@ class OrdenacaoTopologicaView(APIView):
                 "message": "'max_disciplinas' deve ser inteiro."
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        todas = DisciplinaMatriz.objects.filter(matriz__curso=usuario.curso).prefetch_related('disciplinas_prerequisitos', 'disciplina')
+        todas = DisciplinaMatriz.objects.filter(
+            matriz__curso=usuario.curso,
+            optativa__isnull=True  # ignora optativas
+        ).prefetch_related('disciplinas_prerequisitos', 'disciplina')
+
         concluidas = set(usuario.disciplinas_concluidas.values_list('id', flat=True))
         pendentes = [d for d in todas if d.id not in concluidas]
 
