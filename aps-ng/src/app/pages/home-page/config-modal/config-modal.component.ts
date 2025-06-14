@@ -68,7 +68,7 @@ export class ConfigModalComponent implements OnInit {
           concluida: false
         }));
 
-        this.disciplineService.getDisciplines({ usuario: 'jean' }).subscribe(userResp => {
+        this.disciplineService.getDisciplines({ usuario: 'jean', concluidas: 'true'}).subscribe(userResp => {
           if (userResp.success) {
             const concluidas = new Set(userResp.data.map(d => d.id));
 

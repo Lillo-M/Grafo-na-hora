@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.views import APIView
+from collections import defaultdict, deque
 
 from .models import Curso, DisciplinaMatriz, Disciplina, Usuario, Feedback, Optativa
 from .serializers import UsuarioCadastroSerializer, UsuarioLoginSerializer, AtualizaDisciplinasConcluidasSerializer, DisciplinaMatrizDetalhadaSerializer, DisciplinaMatrizSerializer, FeedbackSerializer, UsuarioUpdateSerializer, OptativaSerializer
@@ -191,4 +192,86 @@ class ListaOptativasView(APIView):
             'success': True,
             'message': 'Lista de optativas disponíveis',
             'data': serializer.data
+        }, status=status.HTTP_200_OK)
+    
+class OrdenacaoTopologicaView(APIView):
+    """
+    get:
+    Ordenação topológica priorizando as maiores cadeias de dependências.
+
+    Parâmetros de query:
+    - usuario: (string, obrigatório) nome do usuário
+    - max_disciplinas: (int, obrigatório) número máximo de disciplinas a serem retornadas
+    """
+    def get(self, request):
+        from collections import defaultdict
+
+        usuario_nome = request.query_params.get('usuario')
+        max_disciplinas = request.query_params.get('max_disciplinas')
+
+        if not usuario_nome or not max_disciplinas:
+            return Response({
+                "success": False,
+                "message": "Parâmetros 'usuario' e 'max_disciplinas' são obrigatórios."
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            usuario = Usuario.objects.get(nome=usuario_nome)
+            max_disciplinas = int(max_disciplinas)
+        except Usuario.DoesNotExist:
+            return Response({
+                "success": False,
+                "message": "Usuário não encontrado."
+            }, status=status.HTTP_404_NOT_FOUND)
+        except ValueError:
+            return Response({
+                "success": False,
+                "message": "'max_disciplinas' deve ser inteiro."
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        todas = DisciplinaMatriz.objects.filter(matriz__curso=usuario.curso).prefetch_related('disciplinas_prerequisitos', 'disciplina')
+        concluidas = set(usuario.disciplinas_concluidas.values_list('id', flat=True))
+        pendentes = [d for d in todas if d.id not in concluidas]
+
+        grafo = defaultdict(list)
+        id_to_disciplina = {}
+
+        for d in todas:  # Grafo com todas as disciplinas
+            id_to_disciplina[d.id] = d
+            for prereq in d.get_all_disciplinas_prerequisitos():
+                grafo[prereq.id].append(d.id)
+
+        # Função para calcular o comprimento máximo da cadeia (DFS + memo)
+        memo = {}
+        def profundidade(disc_id):
+            if disc_id in memo:
+                return memo[disc_id]
+            max_cadeia = 1
+            for vizinho in grafo.get(disc_id, []):
+                if vizinho not in concluidas:
+                    max_cadeia = max(max_cadeia, 1 + profundidade(vizinho))
+            memo[disc_id] = max_cadeia
+            return max_cadeia
+
+        disciplinas_cadeia = []
+        for d in pendentes:
+            cadeia = profundidade(d.id)
+            disciplinas_cadeia.append( (cadeia, d) )
+
+        disciplinas_cadeia.sort(reverse=True, key=lambda x: x[0])
+
+        resultado = []
+        for cadeia, d in disciplinas_cadeia[:max_disciplinas]:
+            resultado.append({
+                "id": d.id,
+                "codigo": d.disciplina.id,
+                "nome": d.disciplina.nome,
+                "periodo": d.periodo,
+                "comprimento_cadeia": cadeia
+            })
+
+        return Response({
+            "success": True,
+            "message": "Ordenação topológica por comprimento máximo de cadeia gerada.",
+            "data": resultado
         }, status=status.HTTP_200_OK)

@@ -16,7 +16,7 @@ export class DisciplineService {
 
   constructor(private http: HttpClient) {}
 
-  getDisciplines(filters?: { optativa?: string; periodo?: string; usuario?: string }): Observable<ApiResponse> {
+  getDisciplines(filters?: { optativa?: string; periodo?: string; usuario?: string, concluidas?: string; }): Observable<ApiResponse> {
     let params = new HttpParams();
 
     if (filters) {
@@ -28,6 +28,9 @@ export class DisciplineService {
       }
       if (filters.usuario) {
         params = params.set('usuario', filters.usuario);
+      }
+      if (filters.concluidas) {
+        params = params.set('concluidas', filters.concluidas);
       }
     }
 
