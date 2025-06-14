@@ -7,8 +7,8 @@ from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.views import APIView
 
-from .models import Curso, DisciplinaMatriz, Disciplina, Usuario, Feedback
-from .serializers import UsuarioCadastroSerializer, UsuarioLoginSerializer, AtualizaDisciplinasConcluidasSerializer, DisciplinaMatrizDetalhadaSerializer, DisciplinaMatrizSerializer, FeedbackSerializer, UsuarioUpdateSerializer
+from .models import Curso, DisciplinaMatriz, Disciplina, Usuario, Feedback, Optativa
+from .serializers import UsuarioCadastroSerializer, UsuarioLoginSerializer, AtualizaDisciplinasConcluidasSerializer, DisciplinaMatrizDetalhadaSerializer, DisciplinaMatrizSerializer, FeedbackSerializer, UsuarioUpdateSerializer, OptativaSerializer
 
 schema_view = get_swagger_view(title='GrafoNaHora API')
 
@@ -132,3 +132,13 @@ class DeleteUserView(APIView):
             return Response({'success': True, 'message': f'Usuário {nome} deletado com sucesso.'}, status=status.HTTP_200_OK)
         except Usuario.DoesNotExist:
             return Response({'success': False, 'message': 'Usuário não encontrado.'}, status=status.HTTP_404_NOT_FOUND)
+        
+class ListaOptativasView(APIView):
+    def get(self, request):
+        optativas = Optativa.objects.all()
+        serializer = OptativaSerializer(optativas, many=True)
+        return Response({
+            'success': True,
+            'message': 'Lista de optativas disponíveis',
+            'data': serializer.data
+        }, status=status.HTTP_200_OK)

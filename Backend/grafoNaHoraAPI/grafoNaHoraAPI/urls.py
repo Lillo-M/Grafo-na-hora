@@ -21,7 +21,7 @@ from django.urls import path, re_path
 from rest_framework.permissions import AllowAny
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-from grafoNaHora.views import DisciplinasPorCursoView, CadastroView, LoginView, DisciplinasConcluidasView, FeedbackCreateView, DeleteUserView, UpdateUserView
+from grafoNaHora.views import DisciplinasPorCursoView, CadastroView, LoginView, DisciplinasConcluidasView, FeedbackCreateView, DeleteUserView, UpdateUserView, ListaOptativasView
 
 
 
@@ -47,5 +47,6 @@ urlpatterns = [
     path('api/feedback/', FeedbackCreateView.as_view(), name='feedback-create'),
     path('usuarios/<str:nome>/delete/', DeleteUserView.as_view(), name='delete-user'),
     path('usuarios/<str:nome>/update/', UpdateUserView.as_view()),
+    path('optativas/', ListaOptativasView.as_view(), name='lista-optativas'),
 
 ]

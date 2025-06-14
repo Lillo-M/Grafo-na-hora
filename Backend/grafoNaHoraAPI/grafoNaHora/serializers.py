@@ -1,6 +1,6 @@
 # serializers.py
 from rest_framework import serializers
-from .models import Disciplina, DisciplinaMatriz, Usuario, Feedback
+from .models import Disciplina, DisciplinaMatriz, Usuario, Feedback, Optativa
 
 class DisciplinaMatrizSerializer(serializers.ModelSerializer):
     class Meta:
@@ -59,3 +59,8 @@ class FeedbackSerializer(serializers.ModelSerializer):
     class Meta:
         model = Feedback
         fields = ['id', 'texto', 'usuario']
+
+class OptativaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Optativa
+        fields = ['id', 'nome']

@@ -23,41 +23,48 @@
       </div>
     </p-card>
   </div>
-  <div id="filter" class="w-[99dvw] self-center">
-    <app-filter-button [text]="'Concluídas'"></app-filter-button>
-    <app-filter-button [text]="'Optativas'"></app-filter-button>
-    <app-filter-button [text]="'Pendentes'"></app-filter-button>
-    <app-filter-button [text]="'TrilhaA'"></app-filter-button>
-    <app-filter-button [text]="'TrilhaB'"></app-filter-button>
-    <app-filter-button [text]="'TrilhaB'"></app-filter-button>
-    <app-filter-button [text]="'TrilhaB'"></app-filter-button>
-    <app-filter-button [text]="'TrilhaB'"></app-filter-button>
-    <app-filter-button [text]="'TrilhaB'"></app-filter-button>
-    <app-filter-button [text]="'TrilhaB'"></app-filter-button>
-    <app-filter-button [text]="'TrilhaB'"></app-filter-button>
-    <app-filter-button [text]="'TrilhaB'"></app-filter-button>
-  </div>
+
+<div id="filter"
+     class="w-[99dvw] self-center flex gap-2 my-2 overflow-x-auto whitespace-nowrap"
+     (mousedown)="startDrag($event)"
+     (mousemove)="onDrag($event)"
+     (mouseup)="stopDrag()"
+     (mouseleave)="stopDrag()"
+     #scrollContainer
+     style="scrollbar-width: none; -ms-overflow-style: none;">
+
+  <app-filter-button [text]="'Concluídas'"></app-filter-button>
+  <app-filter-button [text]="'Pendentes'"></app-filter-button>
+  <app-filter-button [text]="'Optativas'"></app-filter-button>
+
+  <ng-container *ngFor="let optativa of optativas">
+    <app-filter-button [text]="optativa.nome" [attr.data-id]="optativa.id"></app-filter-button>
+  </ng-container>
+</div>
+
+<style>
+  #filter::-webkit-scrollbar {
+    display: none;
+  }
+</style>
+
+
+
   <div id="grafo">
     <app-graph (showDrawer)="showDisciplineInfo($event)"></app-graph>
   </div>
-  <p-drawer
-    [header]="selectedDiscpline?.nome"
-    [(visible)]="drawerVisible"
-    position="right"
-  >
+
+  <p-drawer [header]="selectedDiscpline?.nome" [(visible)]="drawerVisible" position="right">
     @if(selectedDiscpline?.nome_optativa != null) {
     <div class="flex items-center gap-2">
       <label for="optativaCB" class="cursor-pointer">Disciplina Optativa</label>
     </div>
     }
     <div class="flex items-center gap-2">
-      <label for="chsText" class="cursor-pointer"
-        >Carga Horária Semanal:
-      </label>
+      <label for="chsText" class="cursor-pointer">Carga Horária Semanal:</label>
       <span>{{ selectedDiscpline?.carga_horaria }}</span>
     </div>
-    @if ( selectedDiscpline?.pre_requisitos &&
-    selectedDiscpline!.pre_requisitos!.length > 0) {
+    @if (selectedDiscpline?.pre_requisitos && selectedDiscpline!.pre_requisitos!.length > 0) {
     <p>Pré-requisitos:</p>
     <ul id="pre-requisites-list">
       @for (disciplineName of selectedDiscpline?.pre_requisitos; track $index) {
@@ -69,5 +76,6 @@
 
     <p-button label="Marcar como concluída" variant="text" severity="help" (click)="concludeClick()"/>
   </p-drawer>
+
   <app-feedback-modal class="self-center"></app-feedback-modal>
 </div>

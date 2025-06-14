@@ -19,10 +19,12 @@ import { ButtonModule } from 'primeng/button';
 import { GraphComponent } from './graph/graph.component';
 import { DisciplineService } from '../../services/discipline.service';
 import { Discipline } from '../../interfaces/discipline';
+import { OptativaService, Optativa } from '../../services/optativa.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-home-page',
-  standalone: true, // Adicione se for standalone
+  standalone: true,
   imports: [
     InputTextModule,
     FilterButtonComponent,
@@ -34,31 +36,71 @@ import { Discipline } from '../../interfaces/discipline';
     CheckboxModule,
     ButtonModule,
     ConfigModalComponent,
+    CommonModule,
   ],
   templateUrl: './home-page.component.html',
-  styleUrls: ['./home-page.component.scss'], // Corrigido de styleUrl para styleUrls
+  styleUrls: ['./home-page.component.scss'],
 })
 export class HomePageComponent implements AfterViewInit {
   @ViewChild('filter') filterDiv!: ElementRef<HTMLDivElement>;
   router = inject(Router);
   disciplineService = inject(DisciplineService);
+  optativaService = inject(OptativaService);
   drawerVisible: boolean = false;
   selectedDiscpline?: Discipline;
   disciplineDict: { [cursoId: string]: Discipline } = {};
 
+  optativas: Optativa[] = [];  // <-- adicionamos aqui
+
+  @ViewChild('scrollContainer', { static: true }) scrollContainer!: ElementRef;
+
+  isDragging = false;
+  startX = 0;
+  scrollLeft = 0;
+
+  startDrag(event: MouseEvent) {
+    this.isDragging = true;
+    this.startX = event.pageX - this.scrollContainer.nativeElement.offsetLeft;
+    this.scrollLeft = this.scrollContainer.nativeElement.scrollLeft;
+  }
+
+  onDrag(event: MouseEvent) {
+    if (!this.isDragging) return;
+    event.preventDefault();
+    const x = event.pageX - this.scrollContainer.nativeElement.offsetLeft;
+    const walk = (x - this.startX) * 1; // velocidade de arrasto
+    this.scrollContainer.nativeElement.scrollLeft = this.scrollLeft - walk;
+  }
+
+  stopDrag() {
+    this.isDragging = false;
+  }
+
   ngOnInit() {
     let temp = sessionStorage.getItem('token');
     if (!temp || temp != 'testaNaAPI') {
-      // Testa na API se o token existe e está válido.
       this.router.navigate(['/login']);
       return;
     }
+
+    // Carrega disciplinas
     this.disciplineService.getDisciplines().subscribe((response) => {
       response.data.forEach(
         (discipline) => (this.disciplineDict[discipline.nome] = discipline)
       );
     });
+
+    // Carrega optativas
+    this.optativaService.listarOptativas().subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.optativas = response.data;
+        }
+      },
+      error: () => console.error('Erro ao carregar optativas'),
+    });
   }
+  
 
   ngAfterViewInit() {
     const el = this.filterDiv?.nativeElement;
@@ -77,6 +119,7 @@ export class HomePageComponent implements AfterViewInit {
     this.selectedDiscpline = this.disciplineDict[cursoId ?? ''];
     this.drawerVisible = true;
   }
+
   concludeClick() {
     if (!this.selectedDiscpline) return;
 
@@ -111,5 +154,4 @@ export class HomePageComponent implements AfterViewInit {
       error: () => alert('Erro ao carregar disciplinas do usuário')
     });
   }
-
 }
