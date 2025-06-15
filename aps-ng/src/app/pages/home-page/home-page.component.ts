@@ -49,9 +49,12 @@ export class HomePageComponent implements AfterViewInit {
   drawerVisible: boolean = false;
   selectedDiscpline?: Discipline;
   disciplineDict: { [cursoId: string]: Discipline } = {};
+  concluidas: boolean = false;
 
-  optativas: Optativa[] = [];  // <-- adicionamos aqui
+  optativas: Optativa[] = []; // <-- adicionamos aqui
+  selectedOptativas: Optativa[] = [];
 
+  @ViewChild(GraphComponent) grafo!: GraphComponent;
   @ViewChild('scrollContainer', { static: true }) scrollContainer!: ElementRef;
 
   isDragging = false;
@@ -78,7 +81,7 @@ export class HomePageComponent implements AfterViewInit {
 
   ngOnInit() {
     let temp = sessionStorage.getItem('token');
-    if (!temp || temp != 'testaNaAPI') {
+    if (!temp) {
       this.router.navigate(['/login']);
       return;
     }
@@ -100,7 +103,6 @@ export class HomePageComponent implements AfterViewInit {
       error: () => console.error('Erro ao carregar optativas'),
     });
   }
-  
 
   ngAfterViewInit() {
     const el = this.filterDiv?.nativeElement;
@@ -119,39 +121,100 @@ export class HomePageComponent implements AfterViewInit {
     this.selectedDiscpline = this.disciplineDict[cursoId ?? ''];
     this.drawerVisible = true;
   }
+  
+  activeConcluidas(filter: { active: boolean; name: string }) {
+    this.concluidas = filter.active;
+
+    let temp: any;
+    if (this.selectedOptativas.length > 0)
+      temp = this.selectedOptativas.map((x) => x.id).join(',');
+    else temp = null;
+
+    this.disciplineService
+      .getDisciplines({
+        usuario: sessionStorage.getItem('token')!,
+        optativa: temp,
+        concluidas: this.concluidas ? 'true':'false',
+      })
+      .subscribe((response) => {
+        this.grafo.refreshGraph(response.data);
+      });
+  }
+
+  activeFilter(filter: { active: boolean; name: string }) {
+    if (filter.active) this.addSelectedFilter(filter.name);
+    else this.removeSelectedFilter(filter.name);
+
+    let temp: any;
+    if (this.selectedOptativas.length > 0)
+      temp = this.selectedOptativas.map((x) => x.id).join(',');
+    else temp = null;
+
+    this.disciplineService
+      .getDisciplines({
+        usuario: sessionStorage.getItem('token')!,
+        optativa: temp,
+        concluidas: this.concluidas ? 'true':'false',
+      })
+      .subscribe((response) => {
+        this.grafo.refreshGraph(response.data);
+      });
+  }
+
+  addSelectedFilter(name: string) {
+    if (!this.selectedOptativas.some((x) => x.nome == name))
+      this.selectedOptativas.push(
+        ...this.optativas.filter((x) => x.nome == name)
+      );
+  }
+
+  removeSelectedFilter(name: string) {
+    if (this.selectedOptativas.some((x) => x.nome == name))
+      this.selectedOptativas = this.selectedOptativas.filter(
+        (x) => x.nome != name
+      );
+  }
 
   concludeClick() {
     if (!this.selectedDiscpline) return;
 
     const disciplinaSelecionada = this.selectedDiscpline;
 
-    this.disciplineService.getDisciplines({ usuario: 'jean' }).subscribe({
-      next: (response) => {
-        if (response.success) {
-          const disciplinasConcluidas = response.data.map(d => d.id);
+    this.disciplineService
+      .getDisciplines({ usuario: sessionStorage.getItem('token')! })
+      .subscribe({
+        next: (response) => {
+          if (response.success) {
+            const disciplinasConcluidas = response.data.map((d) => d.id);
 
-          if (disciplinasConcluidas.includes(disciplinaSelecionada.id)) {
-            this.drawerVisible = false;
-            return;
+            if (disciplinasConcluidas.includes(disciplinaSelecionada.id)) {
+              this.drawerVisible = false;
+              return;
+            }
+
+            disciplinasConcluidas.push(disciplinaSelecionada.id);
+
+            this.disciplineService
+              .updateUserDisciplines(
+                sessionStorage.getItem('token')!,
+                disciplinasConcluidas
+              )
+              .subscribe({
+                next: (res) => {
+                  if (res.success) {
+                    this.drawerVisible = false;
+                  } else {
+                    alert('Erro ao salvar disciplinas concluídas');
+                  }
+                },
+                error: () =>
+                  alert('Erro de conexão ao salvar disciplinas concluídas'),
+              });
+          } else {
+            alert('Erro ao obter disciplinas concluídas');
           }
-
-          disciplinasConcluidas.push(disciplinaSelecionada.id);
-
-          this.disciplineService.updateUserDisciplines('jean', disciplinasConcluidas).subscribe({
-            next: (res) => {
-              if (res.success) {
-                this.drawerVisible = false;
-              } else {
-                alert('Erro ao salvar disciplinas concluídas');
-              }
-            },
-            error: () => alert('Erro de conexão ao salvar disciplinas concluídas'),
-          });
-        } else {
-          alert('Erro ao obter disciplinas concluídas');
-        }
-      },
-      error: () => alert('Erro ao carregar disciplinas do usuário')
-    });
+        },
+        error: () => alert('Erro ao carregar disciplinas do usuário'),
+      });
   }
 }

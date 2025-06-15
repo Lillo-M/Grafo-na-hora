@@ -62,9 +62,7 @@ export class LoginComponent {
 
   ngOnInit() {
     let temp = sessionStorage.getItem('token');
-    if (( temp && temp == 'testaNaAPI')) {
-      // Testa na API se o token existe e está válido.
-      console.log('testou e deu boa');
+    if (temp != null) {
       this.router.navigate(['/home']);
     }
     this.loginForm.controls['username'].valueChanges
@@ -89,27 +87,28 @@ export class LoginComponent {
 
     const { username, password } = this.loginForm.value;
 
-    this.userService.logarUsuario({
-      nome: username,
-      senha: password,
-      }).subscribe({
+    this.userService
+      .logarUsuario({
+        nome: username,
+        senha: password,
+      })
+      .subscribe({
         next: (response) => {
           if (response.success) {
-            sessionStorage.setItem('token', response.token || 'testaNaAPI'); // Seta Token com oq recebeu da API
+            sessionStorage.setItem('token', username); // Seta Token com oq recebeu da API
             this.router.navigate(['/home']);
           }
         },
         error: (error) => {
-            console.error('Erro ao fazer login:', error);
-            this.errorMessage = error.error?.message || "Erro ao fazer login. Tente novamente.";
-            this.invalidCredentials = true;
-            this.sub.next(0); // Retira a mensagem após o tempo registrado na subscrição.
+          console.error('Erro ao fazer login:', error);
+          this.errorMessage =
+            error.error?.message || 'Erro ao fazer login. Tente novamente.';
+          this.invalidCredentials = true;
+          this.sub.next(0); // Retira a mensagem após o tempo registrado na subscrição.
         },
-    })
+      });
   }
-  recoverPasswordOnClick() {
-
-  }
+  recoverPasswordOnClick() {}
   registerOnClick() {
     this.router.navigate(['/register']);
   }

@@ -68,7 +68,7 @@ export class ConfigModalComponent implements OnInit {
           concluida: false
         }));
 
-        this.disciplineService.getDisciplines({ usuario: 'jean', concluidas: 'true'}).subscribe(userResp => {
+        this.disciplineService.getDisciplines({ usuario: sessionStorage.getItem('token')!, concluidas: 'true'}).subscribe(userResp => {
           if (userResp.success) {
             const concluidas = new Set(userResp.data.map(d => d.id));
 
@@ -89,7 +89,7 @@ export class ConfigModalComponent implements OnInit {
       const selecionadas: Discipline[] = this.formGroup.value.disciplines;
       const idsSelecionados = selecionadas.map(d => d.id);
 
-      this.disciplineService.updateUserDisciplines('jean', idsSelecionados).subscribe({
+      this.disciplineService.updateUserDisciplines(sessionStorage.getItem('token')!, idsSelecionados).subscribe({
         next: (response) => {
           if (response.success) {
             this.visible = false;
@@ -106,7 +106,7 @@ export class ConfigModalComponent implements OnInit {
           periodo: Number(this.semester),
         };
 
-        this.userService.updateUser('jean', updatePayload).subscribe({
+        this.userService.updateUser(sessionStorage.getItem('token')!, updatePayload).subscribe({
           next: (response) => {
             if (!response.success) {
               alert('Erro ao atualizar período do usuário');

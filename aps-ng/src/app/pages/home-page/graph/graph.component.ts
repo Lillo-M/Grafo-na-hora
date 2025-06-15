@@ -23,11 +23,36 @@ export class GraphComponent {
 
   ngOnInit(): void {
     cytoscape.use(dagre);
-    this.initCytoscape();
-    this.disciplineService.getDisciplines().subscribe((response) => {
+    this.disciplineService.getDisciplines({usuario: sessionStorage.getItem('token')!}).subscribe((response) => {
       this.disciplines = response.data;
       this.initCytoscape();
     });
+  }
+  
+  refreshGraph(disciplines: Discipline[]) {
+    console.log(disciplines);
+    let elems = disciplines.map<any>((discipline) => {
+      return {
+        data: {
+          id: discipline.nome,
+          label: discipline.nome,
+        },
+      };
+    });
+    disciplines.forEach((discipline) => {
+      discipline.pre_requisitos.forEach((requisito) => {
+        if (disciplines.some(x => x.nome == requisito))
+        elems.push({
+          data: {
+            source: requisito,
+            target: discipline.nome,
+          },
+        });
+      });
+    });
+    this.cy.elements().remove();
+    this.cy.add(elems);
+    this.cy.layout({ name: 'dagre' }).run();
   }
 
   initCytoscape() {
@@ -43,8 +68,8 @@ export class GraphComponent {
       discipline.pre_requisitos.forEach((requisito) => {
         elems.push({
           data: {
-            source: discipline.nome,
-            target: requisito,
+            source: requisito,
+            target: discipline.nome,
           },
         });
       });

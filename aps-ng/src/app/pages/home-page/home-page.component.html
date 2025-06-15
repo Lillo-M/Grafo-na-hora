@@ -27,10 +27,10 @@
      #scrollContainer
      style="scrollbar-width: none; -ms-overflow-style: none;">
 
-  <app-filter-button [text]="'Concluídas'"></app-filter-button>
+  <app-filter-button (activeEvent)="activeConcluidas($event)" [text]="'Concluídas'"></app-filter-button>
 
   <ng-container *ngFor="let optativa of optativas">
-    <app-filter-button [text]="optativa.nome" [attr.data-id]="optativa.id"></app-filter-button>
+    <app-filter-button (activeEvent)="activeFilter($event)" [text]="optativa.nome" [attr.data-id]="optativa.id"></app-filter-button>
   </ng-container>
 </div>
 

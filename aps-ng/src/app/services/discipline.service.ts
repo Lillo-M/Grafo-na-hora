@@ -21,7 +21,7 @@ export class DisciplineService {
 
     if (filters) {
       if (filters.optativa) {
-        params = params.set('optativa', filters.optativa);
+        params = params.set('optativas', filters.optativa);
       }
       if (filters.periodo) {
         params = params.set('periodo', filters.periodo);

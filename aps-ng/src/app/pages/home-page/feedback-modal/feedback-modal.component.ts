@@ -39,7 +39,7 @@ export class FeedbackModalComponent {
   submitFeedback() {
     if (this.formGroup.valid) {
       const texto = this.formGroup.value.text;
-      const usuario = 'jean'; 
+      const usuario = sessionStorage.getItem('token')!; 
 
       this.feedbackService.sendFeedback({ texto, usuario }).subscribe({
         next: (res) => {
