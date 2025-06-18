@@ -96,6 +96,7 @@ export class LoginComponent {
         next: (response) => {
           if (response.success) {
             sessionStorage.setItem('token', username); // Seta Token com oq recebeu da API
+            sessionStorage.setItem('isAdmin', response.admin ? 'true' : 'false');
             this.router.navigate(['/home']);
           }
         },

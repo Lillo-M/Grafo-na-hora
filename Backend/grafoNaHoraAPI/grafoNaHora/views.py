@@ -151,12 +151,17 @@ class LoginView(APIView):
             try:
                 usuario = Usuario.objects.get(nome=nome)
                 if usuario.check_password(senha):
-                    return Response({'success': True, 'message': 'Login bem-sucedido'})
+                    return Response({
+                        'success': True,
+                        'message': 'Login bem-sucedido',
+                        'admin': usuario.admin
+                    })
                 else:
                     return Response({'success': False, 'message': 'Senha incorreta'}, status=status.HTTP_401_UNAUTHORIZED)
             except Usuario.DoesNotExist:
                 return Response({'success': False, 'message': 'Usuário não encontrado'}, status=status.HTTP_404_NOT_FOUND)
         return Response({'success': False, 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
     
 class UpdateUserView(APIView):
     def put(self, request, nome):

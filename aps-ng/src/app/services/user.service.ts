@@ -26,6 +26,7 @@ interface ApiResponse {
   success: boolean;
   message: string;
   token?: string;
+  admin?: boolean; // Apenas para o usuário -> bem feio eu sei
 }
 
 @Injectable({ providedIn: 'root' })

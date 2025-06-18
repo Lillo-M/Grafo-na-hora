@@ -15,7 +15,11 @@
   [resizable]="false"
 >
   <div style="display: flex; flex-direction: column; gap: 1.5rem">
-    <div id="delete-user" style="display: flex; align-items: center; gap: 1rem">
+    <div
+      [hidden]="!isAdmin"
+      id="delete-user"
+      style="display: flex; align-items: center; gap: 1rem"
+    >
       <div style="flex-grow: 1;">
         <p-inputgroup>
           <p-inputgroup-addon>

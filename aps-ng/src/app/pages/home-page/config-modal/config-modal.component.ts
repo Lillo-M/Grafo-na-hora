@@ -45,6 +45,7 @@ export class ConfigModalComponent implements OnInit {
   disciplines: Discipline[] = [];
   deleteUser = "";
   semester = '';
+  isAdmin: boolean = false;
 
   constructor(private fb: FormBuilder, private disciplineService: DisciplineService, private userService: UserService) {}
 
@@ -52,6 +53,8 @@ export class ConfigModalComponent implements OnInit {
     this.formGroup = this.fb.group({
       disciplines: new FormControl<Discipline[] | null>([], Validators.required)
     });
+    this.isAdmin = sessionStorage.getItem('isAdmin') === 'true';
+    console.log('isAdmin:', this.isAdmin);
   }
 
   showDialog() {
