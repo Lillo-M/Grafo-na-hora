@@ -1,0 +1,39 @@
+<p-button (click)="showDialog()" label="Ordenação Topológica" />
+
+<p-dialog
+  [(visible)]="visible"
+  [modal]="true"
+  [closable]="true"
+  [dismissableMask]="true"
+  [style]="{ width: '30rem' }"
+>
+  <ng-template pTemplate="header">
+    <h2 class="text-lg font-semibold">Ordenação Topológica</h2>
+  </ng-template>
+
+  <form [formGroup]="formGroup" class="flex flex-col gap-4">
+    <label for="maxDisciplinas">Número máximo de disciplinas:</label>
+    <input
+      id="maxDisciplinas"
+      type="number"
+      pInputText
+      formControlName="max"
+      min="1"
+      (change)="atualizarOrdenacao()"
+    />
+
+    <ul class="list-disc pl-4">
+      <li *ngFor="let d of disciplinas">
+        {{ d.nome }} (Período {{ d.periodo }}) — Cadeia: {{ d.comprimento_cadeia }}
+      </li>
+    </ul>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <p-button
+      label="Fechar"
+      (click)="visible = false"
+      severity="secondary"
+    />
+  </ng-template>
+</p-dialog>

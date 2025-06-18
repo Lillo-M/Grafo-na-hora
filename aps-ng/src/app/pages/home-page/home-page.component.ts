@@ -8,6 +8,7 @@ import {
 import { FilterButtonComponent } from './filter-button/filter-button.component';
 import { GraphNodeComponent } from './graph-node/graph-node.component';
 import { FeedbackModalComponent } from './feedback-modal/feedback-modal.component';
+import { TopoModalComponent } from './topo-modal/topo-modal.component';
 import { ConfigModalComponent } from './config-modal/config-modal.component';
 
 import { InputTextModule } from 'primeng/inputtext';
@@ -31,6 +32,7 @@ import { CommonModule } from '@angular/common';
     GraphComponent,
     GraphNodeComponent,
     FeedbackModalComponent,
+    TopoModalComponent,
     CardModule,
     DrawerModule,
     CheckboxModule,

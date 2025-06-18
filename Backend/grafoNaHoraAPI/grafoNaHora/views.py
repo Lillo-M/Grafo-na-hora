@@ -269,8 +269,18 @@ class OrdenacaoTopologicaView(APIView):
 
         disciplinas_cadeia = []
         for d in pendentes:
+            # Ignora disciplinas com período > período do usuário + 2
+            if d.periodo > usuario.periodo + 2:
+                continue
+
+            # Ignora disciplinas com pré-requisitos não concluídos
+            prereqs_ids = set(d.get_all_disciplinas_prerequisitos().values_list('id', flat=True))
+            if not prereqs_ids.issubset(concluidas):
+                continue
+
             cadeia = profundidade(d.id)
-            disciplinas_cadeia.append( (cadeia, d) )
+            disciplinas_cadeia.append((cadeia, d))
+
 
         disciplinas_cadeia.sort(reverse=True, key=lambda x: x[0])
 
