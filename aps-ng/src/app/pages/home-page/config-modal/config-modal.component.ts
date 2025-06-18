@@ -60,7 +60,7 @@ export class ConfigModalComponent implements OnInit {
   }
 
   loadDisciplines() {
-    this.disciplineService.getDisciplines().subscribe(allResp => {
+    this.disciplineService.getDisciplines({optativa: 'all'}).subscribe(allResp => {
       if (allResp.success) {
         this.disciplines = allResp.data.map(d => ({
           id: d.id,

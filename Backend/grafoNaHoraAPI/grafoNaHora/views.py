@@ -37,17 +37,25 @@ class DisciplinasPorCursoView(APIView):
         usuario_nome = request.query_params.get('usuario')
         concluidas_param = request.query_params.get('concluidas')
 
-        # Múltiplas optativas (ex: optativas=1,3,5)
+        # Múltiplas optativas (ex: optativas=1,3,5 ou optativas=all)
         if optativas_param:
-            try:
-                optativas_ids = [int(opt) for opt in optativas_param.split(',')]
-                disciplinas_matriz = disciplinas_matriz.filter(optativa__id__in=optativas_ids)
-            except ValueError:
-                return Response({
-                    "success": False,
-                    "message": "Parâmetro 'optativas' inválido. Use uma lista separada por vírgulas, ex: optativas=1,3,5.",
-                    "data": []
-                }, status=status.HTTP_400_BAD_REQUEST)
+            if optativas_param.lower() == 'all':
+                # Não filtra por optativa, ou seja, inclui todas (optativa null e com id)
+                pass
+            else:
+                try:
+                    optativas_ids = [int(opt) for opt in optativas_param.split(',')]
+                    disciplinas_matriz = disciplinas_matriz.filter(optativa__id__in=optativas_ids)
+                except ValueError:
+                    return Response({
+                        "success": False,
+                        "message": "Parâmetro 'optativas' inválido. Use uma lista separada por vírgulas, ex: optativas=1,3,5, ou 'all' para todas.",
+                        "data": []
+                    }, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            # Se não foi especificado, mostra só obrigatórias
+            disciplinas_matriz = disciplinas_matriz.filter(optativa__isnull=True)
+
 
         # Intervalo de períodos
         if periodo_inicio or periodo_fim:
@@ -80,14 +88,10 @@ class DisciplinasPorCursoView(APIView):
                 }, status=status.HTTP_404_NOT_FOUND)
 
         # Filtro de concluídas / não concluídas
-        if concluidas_param is not None:
-            if not usuario:
-                return Response({
-                    "success": False,
-                    "message": "Usuário precisa ser informado para aplicar o filtro de concluídas.",
-                    "data": []
-                }, status=status.HTTP_400_BAD_REQUEST)
+        if concluidas_param is None:
+            concluidas_param = 'false'  # Padrão: não filtrar concluídas
 
+        if usuario and concluidas_param.lower() != 'all':
             concluidas_ids = usuario.disciplinas_concluidas.values_list('id', flat=True)
 
             if concluidas_param.lower() == 'true':
@@ -97,7 +101,7 @@ class DisciplinasPorCursoView(APIView):
             else:
                 return Response({
                     "success": False,
-                    "message": "Valor inválido para 'concluidas'. Use 'true' ou 'false'.",
+                    "message": "Valor inválido para 'concluidas'. Use 'true', 'false' ou 'all'.",
                     "data": []
                 }, status=status.HTTP_400_BAD_REQUEST)
 
@@ -109,6 +113,7 @@ class DisciplinasPorCursoView(APIView):
             "message": f"Disciplinas do curso {curso.nome}",
             "data": serializer.data
         }, status=status.HTTP_200_OK)
+        
 
 
 class DisciplinasConcluidasView(APIView):
