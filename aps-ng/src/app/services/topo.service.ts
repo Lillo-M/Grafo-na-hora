@@ -7,6 +7,7 @@ export interface DisciplinaOrdenada {
   codigo: string;
   nome: string;
   periodo: number;
+  carga_horaria: number;
   comprimento_cadeia: number;
 }
 

@@ -291,6 +291,7 @@ class OrdenacaoTopologicaView(APIView):
                 "codigo": d.disciplina.id,
                 "nome": d.disciplina.nome,
                 "periodo": d.periodo,
+                "carga_horaria": d.carga_horaria,
                 "comprimento_cadeia": cadeia
             })
 

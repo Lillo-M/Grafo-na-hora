@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { TopoService, DisciplinaOrdenada } from '../../../services/topo.service';
 import { CommonModule } from '@angular/common';
 
-
+import { Tag } from 'primeng/tag';
+import { DataViewModule } from 'primeng/dataview';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
@@ -19,12 +20,14 @@ import { InputTextModule } from 'primeng/inputtext';
     InputTextModule,
     ReactiveFormsModule,
     CommonModule,
+    DataViewModule,
+    Tag,
   ]
 })
 export class TopoModalComponent implements OnInit {
-  visible: boolean = false;
+  visible = false;
   formGroup!: FormGroup;
-  disciplinas: DisciplinaOrdenada[] = [];
+  disciplinas = signal<DisciplinaOrdenada[]>([]);
 
   constructor(private fb: FormBuilder, private topoService: TopoService) {}
 
@@ -32,7 +35,6 @@ export class TopoModalComponent implements OnInit {
     this.formGroup = this.fb.group({
       max: new FormControl(5, [Validators.required, Validators.min(1)])
     });
-
     this.carregarOrdenacao();
   }
 
@@ -44,12 +46,12 @@ export class TopoModalComponent implements OnInit {
   carregarOrdenacao() {
     const usuario = sessionStorage.getItem('token')!;
     const max = this.formGroup.get('max')?.value || 5;
-
     this.topoService.obterOrdenacaoTopologica(usuario, max).subscribe(resp => {
       if (resp.success) {
-        this.disciplinas = resp.data;
+        this.disciplinas.set(resp.data);
       }
     });
+    console.log(this.disciplinas());
   }
 
   atualizarOrdenacao() {
