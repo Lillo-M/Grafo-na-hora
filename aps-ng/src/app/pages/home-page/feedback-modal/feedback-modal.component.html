@@ -1,11 +1,11 @@
+<p-toast></p-toast>
 <p-button (click)="showDialog()" label="{{ buttonLabel }}" />
-
 <p-dialog
-  [(visible)]="visible"
-  [modal]="true"
-  [closable]="true"
-  [dismissableMask]="true"
-  [style]="{ width: '25rem' }"
+[(visible)]="visible"
+[modal]="true"
+[closable]="true"
+[dismissableMask]="true"
+[style]="{ width: '25rem' }"
 >
   <ng-template pTemplate="header">
     <h2 class="text-lg font-semibold">Feedback</h2>

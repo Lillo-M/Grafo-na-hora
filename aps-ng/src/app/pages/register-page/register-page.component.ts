@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { MessageModule } from 'primeng/message';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
+import { TooltipModule } from 'primeng/tooltip';
 
 
 @Component({
@@ -18,7 +19,8 @@ import { UserService } from '../../services/user.service';
     FloatLabelModule,
     InputTextModule,
     ButtonModule,
-    MessageModule
+    MessageModule,
+    TooltipModule
   ],
   templateUrl: './register-page.component.html',
   styleUrls: ['./register-page.component.scss'],

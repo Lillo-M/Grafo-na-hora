@@ -9,13 +9,17 @@ import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { TextareaModule } from 'primeng/textarea';
 import { FeedbackService } from '../../../services/feedback.service';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+
 
 @Component({
   selector: 'app-feedback-modal',
   standalone: true,
-  imports: [DialogModule, ButtonModule, TextareaModule, ReactiveFormsModule],
+  imports: [DialogModule, ButtonModule, TextareaModule, ReactiveFormsModule, ToastModule],
   templateUrl: './feedback-modal.component.html',
   styleUrl: './feedback-modal.component.scss',
+  providers: [MessageService],
 })
 export class FeedbackModalComponent {
   @Input() buttonLabel: string = 'Enviar feedback'; // nome do botão configurável
@@ -25,7 +29,8 @@ export class FeedbackModalComponent {
 
   constructor(
     private fb: FormBuilder,
-    private feedbackService: FeedbackService
+    private feedbackService: FeedbackService,
+    private messageService: MessageService
   ) {
     this.formGroup = this.fb.group({
       text: ['', Validators.required],
@@ -44,11 +49,14 @@ export class FeedbackModalComponent {
       this.feedbackService.sendFeedback({ texto, usuario }).subscribe({
         next: (res) => {
           if (res.success) {
-            alert('Feedback enviado com sucesso!');
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Enviado!',
+              detail: 'Seu feedback foi enviado ao administrador.',
+              life: 3000,
+            });
             this.visible = false;
             this.formGroup.reset();
-          } else {
-            alert('Erro ao enviar feedback');
           }
         },
         error: () => alert('Erro de conexão ao enviar feedback'),
