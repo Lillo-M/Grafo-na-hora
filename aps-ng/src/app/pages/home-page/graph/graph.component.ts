@@ -66,14 +66,17 @@ export class GraphComponent {
     });
     this.disciplines.forEach((discipline) => {
       discipline.pre_requisitos.forEach((requisito) => {
-        elems.push({
-          data: {
-            source: requisito,
-            target: discipline.nome,
-          },
-        });
+        if (this.disciplines.some(d => d.nome === requisito)) {
+          elems.push({
+            data: {
+              source: requisito,
+              target: discipline.nome,
+            },
+          });
+        }
       });
     });
+
     this.cy = cytoscape({
       container: document.getElementById('cy'),
 

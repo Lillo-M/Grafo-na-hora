@@ -178,12 +178,16 @@ export class HomePageComponent implements AfterViewInit {
   }
 
   concludeClick() {
-    if (!this.selectedDiscpline) return;
+    console.log('Concluir disciplina clicado');
+    if (!this.selectedDiscpline) {
+      console.error('Nenhuma disciplina selecionada');
+      return;
+    };
 
     const disciplinaSelecionada = this.selectedDiscpline;
 
     this.disciplineService
-      .getDisciplines({ usuario: sessionStorage.getItem('token')! })
+      .getDisciplines({ usuario: sessionStorage.getItem('token')!, concluidas: 'true' })
       .subscribe({
         next: (response) => {
           if (response.success) {
@@ -205,6 +209,16 @@ export class HomePageComponent implements AfterViewInit {
                 next: (res) => {
                   if (res.success) {
                     this.drawerVisible = false;
+
+                    // Atualiza o grafo com as novas disciplinas
+                    this.disciplineService.getDisciplines({
+                      usuario: sessionStorage.getItem('token')!,
+                      optativa: this.selectedOptativas.map(o => o.id).join(','),
+                      concluidas: this.concluidas ? 'true' : 'false',
+                    }).subscribe((response) => {
+                      this.grafo.refreshGraph(response.data);
+                    });
+
                   } else {
                     alert('Erro ao salvar disciplinas concluídas');
                   }
