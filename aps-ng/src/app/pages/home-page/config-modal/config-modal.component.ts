@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -39,6 +39,7 @@ interface Discipline {
   ],
 })
 export class ConfigModalComponent implements OnInit {
+  @Output() saved = new EventEmitter<void>();
   visible = false;
   formGroup!: FormGroup;
 
@@ -97,6 +98,7 @@ export class ConfigModalComponent implements OnInit {
           if (response.success) {
             this.visible = false;
             this.formGroup.reset();
+            this.saved.emit();
           } else {
             alert('Erro ao salvar disciplinas concluídas');
           }

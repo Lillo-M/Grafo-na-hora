@@ -233,4 +233,16 @@ export class HomePageComponent implements AfterViewInit {
         error: () => alert('Erro ao carregar disciplinas do usuário'),
       });
   }
+  onConfigSaved() {
+  let optativa = this.selectedOptativas.map(o => o.id).join(',');
+  this.disciplineService
+    .getDisciplines({
+      usuario: sessionStorage.getItem('token')!,
+      optativa,
+      concluidas: this.concluidas ? 'true' : 'false',
+    })
+    .subscribe((response) => {
+      this.grafo.refreshGraph(response.data);
+    });
+  }
 }
