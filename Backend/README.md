@@ -1,5 +1,5 @@
 # Requirements
-* Python 3.11.2
+* Python 3.11.2 (version in Debian 12 repository)
 
 [Crie um ambiente virtual para executar o projeto](https://docs.python.org/pt-br/3/library/venv.html)
 
@@ -15,9 +15,8 @@ pip install -r requirements.txt # after activating
 ---
 To run the project:
 ```bash
-pip install -r requirements.txt
 cd grafoNaHoraAPI
-python manage.py runserver 
+python3 manage.py runserver 
 ```
 
 ## Créditos

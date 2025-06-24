@@ -9,7 +9,7 @@ This project was generated using [Angular CLI](https://github.com/angular/angula
 * [TailwindCSS (com Angular)](https://tailwindcss.com/docs/installation/framework-guides/angular)
 * [TailwindCSS (com PrimeNG)](https://primeng.org/tailwind)
 
-Install on Debian 12:
+Install the JavaScript bloat on Debian 12:
 ```bash
 sudo apt install npm
 sudo npm install -g @angular/cli
@@ -18,7 +18,7 @@ npm install tailwindcss @tailwindcss/postcss postcss --force
 npm i tailwindcss-primeui
 npm install # on this directory
 
-# Install Node.js v22.16.0 (LTS), since the version in Debian 12 repository is outdated (sudo apt install nodejs)
+# Install Node.js v22.16.0 (LTS), since the version in Debian 12 repository is not enough (sudo apt install nodejs)
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
 \. "$HOME/.nvm/nvm.sh"
 nvm install 22
@@ -27,7 +27,6 @@ nvm install 22
 ## Development server
 
 To start a local development server, run:
-
 ```bash
 ng serve
 ```
