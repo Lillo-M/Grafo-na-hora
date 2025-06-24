@@ -19,24 +19,24 @@ def extract_html_eq_utfpr(html_path, csv_path, header):
         if len(tds) < 14:
             continue  # ignora linhas incompletas
 
-        periodo = tds[0].text.strip()
-        opt = tds[1].text.strip().replace('[', '').replace(']', '')
-        codigo = tds[2].text.strip().split(' ')[0]
-        disciplina = tds[3].text.strip()
-        modelo = tds[4].text.strip()
-        teoricas = tds[5].text.strip()
-        praticas = tds[6].text.strip()
+        periodo       = tds[0].text.strip()
+        opt           = tds[1].text.strip().replace('[', '').replace(']', '')
+        codigo        = tds[2].text.strip().split(' ')[0]
+        disciplina    = tds[3].text.strip()
+        modelo        = tds[4].text.strip()
+        teoricas      = tds[5].text.strip()
+        praticas      = tds[6].text.strip()
         total_semanal = tds[7].text.strip()
-        aps = tds[8].text.strip()
-        apcc = tds[9].text.strip()
-        ad = tds[10].text.strip()
-        chext = tds[11].text.strip()
-        chead = tds[12].text.strip()
-        carga_total = tds[13].text.replace('horas', '').strip()
-        pre_req = tds[14].text.strip().replace('\n', ',')
-        equivalentes = tds[15].get_text(separator=",", strip=True)
-        cht_eq = tds[16].text.strip().replace('\n', ',')
-        grupo_eq = tds[17].text.strip().replace('\n', ',')
+        aps           = tds[8].text.strip()
+        apcc          = tds[9].text.strip()
+        ad            = tds[10].text.strip()
+        chext         = tds[11].text.strip()
+        chead         = tds[12].text.strip()
+        carga_total   = tds[13].text.replace('horas', '').strip()
+        pre_req       = tds[14].text.strip().replace('\n', ',')
+        equivalentes  = tds[15].get_text(separator=",", strip=True)
+        cht_eq        = tds[16].text.strip().replace('\n', ',')
+        grupo_eq      = tds[17].text.strip().replace('\n', ',')
 
         rows.append([
             periodo, opt, codigo, disciplina, modelo, teoricas, praticas, total_semanal,
