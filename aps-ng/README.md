@@ -11,17 +11,19 @@ This project was generated using [Angular CLI](https://github.com/angular/angula
 
 Install the JavaScript bloat on Debian 12:
 ```bash
+# sudo apt install nodejs # outdated for this project
 sudo apt install npm
 sudo npm install -g @angular/cli
 npm install primeng @primeng/themes
 npm install tailwindcss @tailwindcss/postcss postcss --force
 npm i tailwindcss-primeui
-npm install # on this directory
 
-# Install Node.js v22.16.0 (LTS), since the version in Debian 12 repository is not enough (sudo apt install nodejs)
+# Install Node.js v22.16.0 (LTS), since the version in Debian 12 repository is not enough for this project
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
 \. "$HOME/.nvm/nvm.sh"
 nvm install 22
+
+npm install # on this directory
 ```
 
 ## Development server
